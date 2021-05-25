@@ -1,19 +1,24 @@
 package com.incubator.dbs.guestservice.model.dto;
 
-import javax.validation.constraints.NotBlank;
+import java.math.BigInteger;
+import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+@AllArgsConstructor
 @Data
 @Builder
-@AllArgsConstructor
 @NoArgsConstructor
-public class SignUpRequestDto {
-  @NotBlank
+@EqualsAndHashCode
+public class GuestInfoResponse {
+
+  private UUID id;
   private String username;
   private String name;
   private String address;
+  private BigInteger creditCard;
   private String phoneNumber;
 }

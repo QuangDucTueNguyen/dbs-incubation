@@ -18,6 +18,11 @@ public class GlobalExceptionHandler {
     this.exceptionMarshaller = exceptionMarshaller;
   }
 
+  /**
+   * Handle global exception
+   * @param e
+   * @return
+   */
   @ExceptionHandler(value = Exception.class)
   public ResponseEntity<JsonNode> handleException(Exception e) {
     log.error("An exception occur.", e);
@@ -27,8 +32,13 @@ public class GlobalExceptionHandler {
         HttpStatus.INTERNAL_SERVER_ERROR);
   }
 
+  /**
+   * Handle GuestServiceException
+   * @param ex
+   * @return
+   */
   @ExceptionHandler(value = GuestServiceException.class)
-  public ResponseEntity<Object> handleGuestException(GuestServiceException ex) {
+  public ResponseEntity<JsonNode> handleGuestException(GuestServiceException ex) {
     log.error("An GuestServiceException occur.", ex);
     return new ResponseEntity<>(
         exceptionMarshaller.toJsonNode(ex.getGuestErrorResponse(), Optional.empty()),

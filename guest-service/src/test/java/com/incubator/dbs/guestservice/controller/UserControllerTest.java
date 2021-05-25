@@ -1,64 +1,73 @@
 package com.incubator.dbs.guestservice.controller;
 
+import com.incubator.dbs.guestservice.model.dto.GuestInfoResponse;
 import com.incubator.dbs.guestservice.model.dto.LoginRequestDto;
 import com.incubator.dbs.guestservice.model.dto.LoginResponseDto;
 import com.incubator.dbs.guestservice.model.dto.SignUpRequestDto;
-import java.util.Collections;
+import com.incubator.dbs.guestservice.model.dto.SignupResponseDto;
+import com.incubator.dbs.guestservice.model.entity.UserProfile;
+import com.incubator.dbs.guestservice.service.UserService;
+import java.util.Optional;
+import java.util.UUID;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(MockitoExtension.class)
 public class UserControllerTest {
 
+  private UserOperation userOperation;
+  private UserService userService;
   private final String USERNAME = "USERNAME";
   private final String PASSWORD = "PASSWORD";
-  private final String DEFAULT_PASSWORD = "DEFAULT_PASSWORD";
-  private final String ACCESS_TOKEN = "ACCESS_TOKEN";
-  private final Long EXPIRE_IN = 1_000_000L;
+  private final String DEFAULT_PASSWORD = "PASSWORD";
   private final String ADDRESS = "ADDRESS";
   private final String PHONE_NUMBER = "+8412345678";
   private final String NAME = "NAME";
-  private final UserOperation userOperation;
-
-  @Mock
-  private UserDetailsService userDetailsService;
-
-  @Mock
-  private AuthenticationManager authenticationManager;
+  private final String ACCESS_TOKEN = "ACCESS_TOKEN";
+  private final UUID USER_ID = UUID.randomUUID();
 
   public UserControllerTest() {
-    userOperation = new UserController();
+    userService = Mockito.mock(UserService.class);
+    userOperation = new UserController(userService);
   }
 
   @Test
   public void signUp_shouldWork() {
     var signUpRequest = SignUpRequestDto.builder().name(NAME).address(ADDRESS).phoneNumber(PHONE_NUMBER)
         .username(USERNAME).build();
+    var expected = SignupResponseDto.builder().defaultPassword(DEFAULT_PASSWORD).build();
+    Mockito.when(userService.signUp(signUpRequest)).thenReturn(expected);
     var result = userOperation.signUp(signUpRequest);
-    Assertions.assertEquals(DEFAULT_PASSWORD, result);
+    Assertions.assertEquals(expected.getDefaultPassword(), result.getDefaultPassword());
   }
 
   @Test
   public void login_shouldWork() {
     var loginRequest = LoginRequestDto.builder().username(USERNAME).password(PASSWORD).build();
     var expected = LoginResponseDto.builder().accessToken(ACCESS_TOKEN).build();
+    Mockito.when(userService.login(loginRequest)).thenReturn(expected);
     var result = userOperation.login(loginRequest);
-    var userPassAuthenticateToken = new UsernamePasswordAuthenticationToken(loginRequest.getUsername(),
-        loginRequest.getPassword());
-    Assertions.assertDoesNotThrow(() -> authenticationManager.authenticate(userPassAuthenticateToken));
-
-    var userDetails = new User(USERNAME, PASSWORD, Collections.emptyList());
-    Mockito.when(userDetailsService.loadUserByUsername(USERNAME)).thenReturn(userDetails);
-
     Assertions.assertEquals(expected.getAccessToken(), result.getAccessToken());
+  }
+  @Test
+  void delete_shouldWork() {
+    userOperation.delete(USER_ID.toString());
+    Mockito.verify(userService, Mockito.times(1)).delete(USER_ID.toString());
+
+  }
+
+  @Test
+  void get_shouldWork() {
+    var expected = GuestInfoResponse.builder()
+        .username(USERNAME)
+        .id(USER_ID)
+        .phoneNumber(PHONE_NUMBER)
+        .build();
+    Mockito.when(userService.get(USER_ID.toString())).thenReturn(expected);
+    var result = userService.get(USER_ID.toString());
+    Assertions.assertEquals(expected, result);
   }
 }

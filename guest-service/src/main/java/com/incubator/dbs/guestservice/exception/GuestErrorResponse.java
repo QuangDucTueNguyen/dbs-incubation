@@ -4,7 +4,9 @@ import org.springframework.http.HttpStatus;
 
 public enum GuestErrorResponse {
   UNHANDLED_EXCEPTION(HttpStatus.INTERNAL_SERVER_ERROR, "1000", "Unhandled exception."),
-  NOT_AUTHORIZED(HttpStatus.FORBIDDEN, "1001", "Not authorized.");
+  NOT_AUTHORIZED(HttpStatus.FORBIDDEN, "1001", "Not authorized."),
+  USER_EXISTING(HttpStatus.CONFLICT, "1002", "User name is existing."),
+  NOT_FOUND(HttpStatus.NOT_FOUND, "1003", "Not found.");
 
   private HttpStatus httpStatus;
   private String errorCode;
