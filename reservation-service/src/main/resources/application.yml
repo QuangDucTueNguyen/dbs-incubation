@@ -1,0 +1,21 @@
+spring:
+  datasource:
+    url: ${RESERVATION_DB_URL}
+    username: ${POSTGRES_USERNAME}
+    password: ${POSTGRES_PASSWORD}
+  flyway:
+    schemas: public
+    locations: classpath:db/migration
+    enabled: true
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+
+hotelService:
+  host: ${HOTEL_SERVICE_HOST}
+  getAllRoomType: /api/rooms/types
+
+guestService:
+  host: ${GUEST_SERVICE_HOST}
+  getUserInfo: /api/guest/{id}
