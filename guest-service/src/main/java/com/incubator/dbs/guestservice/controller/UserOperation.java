@@ -11,13 +11,14 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
  * User operation
  */
-@RequestMapping("/api/guest")
+@RequestMapping("/api/guests")
 public interface UserOperation {
 
   /**
@@ -61,7 +62,7 @@ public interface UserOperation {
               schema = @Schema(implementation = GuestInfoResponse.class))}),
       @ApiResponse(responseCode = "404", description = "Not found",
           content = @Content)})
-  GuestInfoResponse get(String id);
+  GuestInfoResponse get(@PathVariable String id);
 
   /**
    * delete guest
@@ -69,5 +70,5 @@ public interface UserOperation {
    */
   @DeleteMapping("/{id}")
   @ApiResponse(responseCode = "204", description = "No content", content = @Content)
-  void delete(String id);
+  void delete(@PathVariable String id);
 }
