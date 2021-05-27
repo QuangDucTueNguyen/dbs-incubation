@@ -7,6 +7,21 @@ spring:
     schemas: public
     locations: classpath:db/migration
     enabled: true
+  application:
+    name: reservation-service
+eureka:
+  client:
+    healthcheck:
+      enabled: true
+    registerWithEureka: true
+    fetchRegistry: true
+    serviceUrl:
+      defaultZone: ${EUREKA_SERVER_HOST}
+  instance:
+    hostName: ${spring.application.name}
+
+server:
+  port: 8080
 
 springdoc:
   swagger-ui:

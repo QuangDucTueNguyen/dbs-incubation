@@ -7,8 +7,25 @@ spring:
     schemas: public
     locations: classpath:db/migration
     enabled: true
+  application:
+    name: guest-service
+
 jwt:
   secret: ${JWT_SECRET_KEY}
+
+eureka:
+  client:
+    healthcheck:
+      enabled: true
+    registerWithEureka: true
+    fetchRegistry: true
+    serviceUrl:
+      defaultZone: ${EUREKA_SERVER_HOST}
+  instance:
+    hostName: ${spring.application.name}
+
+server:
+  port: 8082
 
 springdoc:
   swagger-ui:
