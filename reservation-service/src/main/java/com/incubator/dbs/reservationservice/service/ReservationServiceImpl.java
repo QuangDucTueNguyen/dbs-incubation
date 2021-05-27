@@ -3,9 +3,9 @@ package com.incubator.dbs.reservationservice.service;
 import com.incubator.dbs.reservationservice.exception.ReservationErrorResponse;
 import com.incubator.dbs.reservationservice.exception.ReservationServiceException;
 import com.incubator.dbs.reservationservice.model.constant.ReservationStatus;
-import com.incubator.dbs.reservationservice.model.dto.CreateReservationRequest;
-import com.incubator.dbs.reservationservice.model.dto.ReservationInfoResponse;
-import com.incubator.dbs.reservationservice.model.dto.UpdateReservationRequest;
+import com.incubator.dbs.reservationservice.model.dto.CreateReservationRequestDTO;
+import com.incubator.dbs.reservationservice.model.dto.ReservationInfoResponseDTO;
+import com.incubator.dbs.reservationservice.model.dto.UpdateReservationRequestDTO;
 import com.incubator.dbs.reservationservice.model.entity.Reservation;
 import com.incubator.dbs.reservationservice.repository.ReservationRepository;
 import com.incubator.dbs.reservationservice.service.connector.GuestServiceConnector;
@@ -36,7 +36,7 @@ public class ReservationServiceImpl implements ReservationService {
   }
 
   @Override
-  public ReservationInfoResponse create(CreateReservationRequest request) {
+  public ReservationInfoResponseDTO create(CreateReservationRequestDTO request) {
     log.info("Create a reservation: {}", request);
     var userInfo = guestServiceConnector.getUserInfo(request.getUserId())
         .orElseThrow(() -> {
@@ -76,7 +76,7 @@ public class ReservationServiceImpl implements ReservationService {
   }
 
   @Override
-  public ReservationInfoResponse update(String id, UpdateReservationRequest request) {
+  public ReservationInfoResponseDTO update(String id, UpdateReservationRequestDTO request) {
     log.info("Update reservation {} with body {}", id, request);
     return reservationRepository.findById(id)
         .map(rt -> {
@@ -96,7 +96,7 @@ public class ReservationServiceImpl implements ReservationService {
   }
 
   @Override
-  public List<ReservationInfoResponse> getByUser(String id) {
+  public List<ReservationInfoResponseDTO> getByUser(String id) {
     log.info("Get reservation by user id {}", id);
     return reservationRepository.findAllByUserId(UUID.fromString(id))
         .stream()
@@ -105,7 +105,7 @@ public class ReservationServiceImpl implements ReservationService {
   }
 
   @Override
-  public List<ReservationInfoResponse> get(Instant from, Instant to) {
+  public List<ReservationInfoResponseDTO> get(Instant from, Instant to) {
     log.info("Get reservation from {} - to {}", from, to);
     return reservationRepository.findAllByInArrangeTime(from, to)
         .stream()
@@ -113,8 +113,8 @@ public class ReservationServiceImpl implements ReservationService {
         .collect(Collectors.toList());
   }
 
-  private ReservationInfoResponse toReservationInfo(Reservation reservation) {
-    return ReservationInfoResponse.builder()
+  private ReservationInfoResponseDTO toReservationInfo(Reservation reservation) {
+    return ReservationInfoResponseDTO.builder()
         .id(reservation.getId())
         .roomTypeId(reservation.getRoomTypeId())
         .to(reservation.getToDate())

@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @EqualsAndHashCode
-public class UserInfoResponse {
+public class UserInfoResponseDTO {
 
 
   private UUID id;

@@ -1,6 +1,5 @@
 package com.incubator.dbs.reservationservice.model.dto;
 
-import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,12 +9,10 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class RoomTypeResponse {
+public class HotelInfoResponseDTO {
 
   private Integer id;
-  private String type;
-  private Double price;
-  private Integer numberPersonPerRoom;
-  private Integer numberAvailable;
-  private List<HotelInfoResponse> hotelInfo;
+  private String name;
+  private String hotline;
+  private String address;
 }

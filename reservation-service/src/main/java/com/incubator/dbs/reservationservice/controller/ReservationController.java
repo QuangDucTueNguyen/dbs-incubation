@@ -1,8 +1,8 @@
 package com.incubator.dbs.reservationservice.controller;
 
-import com.incubator.dbs.reservationservice.model.dto.CreateReservationRequest;
-import com.incubator.dbs.reservationservice.model.dto.ReservationInfoResponse;
-import com.incubator.dbs.reservationservice.model.dto.UpdateReservationRequest;
+import com.incubator.dbs.reservationservice.model.dto.CreateReservationRequestDTO;
+import com.incubator.dbs.reservationservice.model.dto.ReservationInfoResponseDTO;
+import com.incubator.dbs.reservationservice.model.dto.UpdateReservationRequestDTO;
 import com.incubator.dbs.reservationservice.service.ReservationService;
 import java.time.Instant;
 import java.util.List;
@@ -22,12 +22,12 @@ public class ReservationController implements ReservationOperations {
 
   @Override
   @ResponseStatus(value = HttpStatus.CREATED)
-  public ReservationInfoResponse create(@Valid CreateReservationRequest request) {
+  public ReservationInfoResponseDTO create(@Valid CreateReservationRequestDTO request) {
     return reservationService.create(request);
   }
 
   @Override
-  public ReservationInfoResponse update(String id, @Valid UpdateReservationRequest request) {
+  public ReservationInfoResponseDTO update(String id, @Valid UpdateReservationRequestDTO request) {
     return reservationService.update(id, request);
   }
 
@@ -38,12 +38,12 @@ public class ReservationController implements ReservationOperations {
   }
 
   @Override
-  public List<ReservationInfoResponse> getByUser(String id) {
+  public List<ReservationInfoResponseDTO> getByUser(String id) {
     return reservationService.getByUser(id);
   }
 
   @Override
-  public List<ReservationInfoResponse> get(Instant from, Instant to) {
+  public List<ReservationInfoResponseDTO> get(Instant from, Instant to) {
     return reservationService.get(from, to);
   }
 }

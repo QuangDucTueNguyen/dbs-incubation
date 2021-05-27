@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class UpdateReservationRequest {
+public class UpdateReservationRequestDTO {
   @NotBlank
   private String status;
 }

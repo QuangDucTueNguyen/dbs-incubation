@@ -2,12 +2,12 @@ package com.incubator.dbs.reservationservice.service;
 
 import com.incubator.dbs.reservationservice.exception.ReservationServiceException;
 import com.incubator.dbs.reservationservice.model.constant.ReservationStatus;
-import com.incubator.dbs.reservationservice.model.dto.CreateReservationRequest;
-import com.incubator.dbs.reservationservice.model.dto.HotelInfoResponse;
-import com.incubator.dbs.reservationservice.model.dto.ReservationInfoResponse;
-import com.incubator.dbs.reservationservice.model.dto.RoomTypeResponse;
-import com.incubator.dbs.reservationservice.model.dto.UpdateReservationRequest;
-import com.incubator.dbs.reservationservice.model.dto.UserInfoResponse;
+import com.incubator.dbs.reservationservice.model.dto.CreateReservationRequestDTO;
+import com.incubator.dbs.reservationservice.model.dto.HotelInfoResponseDTO;
+import com.incubator.dbs.reservationservice.model.dto.ReservationInfoResponseDTO;
+import com.incubator.dbs.reservationservice.model.dto.RoomTypeResponseDTO;
+import com.incubator.dbs.reservationservice.model.dto.UpdateReservationRequestDTO;
+import com.incubator.dbs.reservationservice.model.dto.UserInfoResponseDTO;
 import com.incubator.dbs.reservationservice.model.entity.Reservation;
 import com.incubator.dbs.reservationservice.repository.ReservationRepository;
 import com.incubator.dbs.reservationservice.service.connector.GuestServiceConnector;
@@ -53,7 +53,7 @@ class ReservationServiceTest {
 
   @Test
   void create_shouldWork() {
-    var request = CreateReservationRequest.builder()
+    var request = CreateReservationRequestDTO.builder()
         .userId(USER_ID.toString())
         .roomTypeId(ROOM_TYPE_ID_1)
         .numberRooms(NUMBER_ROOMS)
@@ -62,11 +62,11 @@ class ReservationServiceTest {
         .to(to)
         .build();
 
-    var hotelInfo = HotelInfoResponse.builder()
+    var hotelInfo = HotelInfoResponseDTO.builder()
         .id(HOTEL_ID_1)
         .build();
 
-    var roomType = RoomTypeResponse.builder()
+    var roomType = RoomTypeResponseDTO.builder()
         .id(ROOM_TYPE_ID_1)
         .numberAvailable(NUMBER_AVAILABLE)
         .hotelInfo(List.of(hotelInfo))
@@ -82,11 +82,11 @@ class ReservationServiceTest {
         .status(ReservationStatus.PENDING)
         .build();
 
-    var userInfo = UserInfoResponse.builder()
+    var userInfo = UserInfoResponseDTO.builder()
         .id(USER_ID)
         .build();
 
-    var expected = ReservationInfoResponse.builder()
+    var expected = ReservationInfoResponseDTO.builder()
         .roomTypeId(entity.getRoomTypeId())
         .id(entity.getId())
         .to(entity.getToDate())
@@ -107,7 +107,7 @@ class ReservationServiceTest {
 
   @Test
   void create_shouldThrow_NotFound_WhenInputInvalidUserId() {
-    var request = CreateReservationRequest.builder()
+    var request = CreateReservationRequestDTO.builder()
         .userId(USER_ID.toString())
         .roomTypeId(ROOM_TYPE_ID_1)
         .numberRooms(NUMBER_ROOMS)
@@ -121,14 +121,14 @@ class ReservationServiceTest {
 
   @Test
   void create_shouldThrow_NotFound_WhenInputInvalidRoomTypeId() {
-    var request = CreateReservationRequest.builder()
+    var request = CreateReservationRequestDTO.builder()
         .userId(USER_ID.toString())
         .roomTypeId(ROOM_TYPE_ID_1)
         .numberRooms(NUMBER_ROOMS)
         .hotelId(HOTEL_ID_1)
         .build();
 
-    var userInfo = UserInfoResponse.builder()
+    var userInfo = UserInfoResponseDTO.builder()
         .id(USER_ID)
         .build();
     Mockito.when(guestServiceConnector.getUserInfo(USER_ID.toString())).thenReturn(Optional.of(userInfo));
@@ -138,18 +138,18 @@ class ReservationServiceTest {
 
   @Test
   void create_shouldThrow_NotFound_WhenInputInvalidHotelId() {
-    var request = CreateReservationRequest.builder()
+    var request = CreateReservationRequestDTO.builder()
         .userId(USER_ID.toString())
         .roomTypeId(ROOM_TYPE_ID_1)
         .numberRooms(NUMBER_ROOMS)
         .hotelId(HOTEL_ID_1)
         .build();
 
-    var userInfo = UserInfoResponse.builder()
+    var userInfo = UserInfoResponseDTO.builder()
         .id(USER_ID)
         .build();
 
-    var roomType = RoomTypeResponse.builder()
+    var roomType = RoomTypeResponseDTO.builder()
         .id(ROOM_TYPE_ID_1)
         .numberAvailable(NUMBER_AVAILABLE)
         .hotelInfo(List.of())
@@ -163,7 +163,7 @@ class ReservationServiceTest {
 
   @Test
   void update_shouldWork() {
-    var request = UpdateReservationRequest.builder()
+    var request = UpdateReservationRequestDTO.builder()
         .status(ReservationStatus.PAID.getValue())
         .build();
     var entity = Reservation.builder()
@@ -173,7 +173,7 @@ class ReservationServiceTest {
     entity.setStatus(ReservationStatus.valueOf(request.getStatus()));
     entity.setUpdateTime(Instant.now());
     Mockito.when(reservationRepository.save(entity)).thenReturn(entity);
-    var expected = ReservationInfoResponse.builder()
+    var expected = ReservationInfoResponseDTO.builder()
         .status(entity.getStatus())
         .build();
     var result = reservationService.update(RESERVATION_ID_1.toString(), request);
@@ -183,7 +183,7 @@ class ReservationServiceTest {
 
   @Test
   void update_shouldThrow_NotFound_WithInvalidReservationId() {
-    var request = UpdateReservationRequest.builder()
+    var request = UpdateReservationRequestDTO.builder()
         .status(ReservationStatus.PAID.getValue())
         .build();
     Mockito.when(reservationRepository.findById(RESERVATION_ID_1.toString())).thenReturn(Optional.empty());
@@ -215,14 +215,14 @@ class ReservationServiceTest {
         .roomTypeId(ROOM_TYPE_ID_2)
         .status(ReservationStatus.PAID)
         .build();
-    var reservation1 = ReservationInfoResponse.builder()
+    var reservation1 = ReservationInfoResponseDTO.builder()
         .createdTime(entity1.getCreatedTime())
         .hotelId(entity1.getHotelId())
         .numberRooms(entity1.getNumberRooms())
         .roomTypeId(entity1.getRoomTypeId())
         .status(entity1.getStatus())
         .build();
-    var reservation2 = ReservationInfoResponse.builder()
+    var reservation2 = ReservationInfoResponseDTO.builder()
         .createdTime(entity2.getCreatedTime())
         .hotelId(entity2.getHotelId())
         .numberRooms(entity2.getNumberRooms())
@@ -260,7 +260,7 @@ class ReservationServiceTest {
         .roomTypeId(ROOM_TYPE_ID_2)
         .status(ReservationStatus.PAID)
         .build();
-    var reservation1 = ReservationInfoResponse.builder()
+    var reservation1 = ReservationInfoResponseDTO.builder()
         .createdTime(entity1.getCreatedTime())
         .hotelId(entity1.getHotelId())
         .to(entity1.getToDate())
@@ -269,7 +269,7 @@ class ReservationServiceTest {
         .roomTypeId(entity1.getRoomTypeId())
         .status(entity1.getStatus())
         .build();
-    var reservation2 = ReservationInfoResponse.builder()
+    var reservation2 = ReservationInfoResponseDTO.builder()
         .createdTime(entity2.getCreatedTime())
         .hotelId(entity2.getHotelId())
         .numberRooms(entity2.getNumberRooms())

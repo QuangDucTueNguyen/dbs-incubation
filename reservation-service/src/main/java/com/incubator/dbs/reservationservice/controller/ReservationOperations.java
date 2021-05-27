@@ -1,8 +1,8 @@
 package com.incubator.dbs.reservationservice.controller;
 
-import com.incubator.dbs.reservationservice.model.dto.CreateReservationRequest;
-import com.incubator.dbs.reservationservice.model.dto.ReservationInfoResponse;
-import com.incubator.dbs.reservationservice.model.dto.UpdateReservationRequest;
+import com.incubator.dbs.reservationservice.model.dto.CreateReservationRequestDTO;
+import com.incubator.dbs.reservationservice.model.dto.ReservationInfoResponseDTO;
+import com.incubator.dbs.reservationservice.model.dto.UpdateReservationRequestDTO;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -19,28 +19,28 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-@RequestMapping(value = "/api/reservation")
+@RequestMapping(value = "/api/reservations")
 public interface ReservationOperations {
 
   @PostMapping
   @ApiResponses(value = {
       @ApiResponse(responseCode = "201", description = "Create room",
           content = {@Content(mediaType = "application/json",
-              schema = @Schema(implementation = ReservationInfoResponse.class))}),
+              schema = @Schema(implementation = ReservationInfoResponseDTO.class))}),
       @ApiResponse(responseCode = "400", description = "Invalid value",
           content = @Content)})
-  ReservationInfoResponse create(@Valid @RequestBody CreateReservationRequest request);
+  ReservationInfoResponseDTO create(@Valid @RequestBody CreateReservationRequestDTO request);
 
   @PatchMapping("/{id}")
   @ApiResponses(value = {
       @ApiResponse(responseCode = "200", description = "Update room",
           content = {@Content(mediaType = "application/json",
-              schema = @Schema(implementation = ReservationInfoResponse.class))}),
+              schema = @Schema(implementation = ReservationInfoResponseDTO.class))}),
       @ApiResponse(responseCode = "400", description = "Invalid value",
           content = @Content),
       @ApiResponse(responseCode = "404", description = "Not Found",
           content = @Content)})
-  ReservationInfoResponse update(@PathVariable String id, @Valid @RequestBody UpdateReservationRequest request);
+  ReservationInfoResponseDTO update(@PathVariable String id, @Valid @RequestBody UpdateReservationRequestDTO request);
 
   @DeleteMapping("/{id}")
   @ApiResponse(responseCode = "204", description = "No content", content = @Content)
@@ -50,14 +50,14 @@ public interface ReservationOperations {
   @ApiResponses(value = {
       @ApiResponse(responseCode = "200", description = "Get reservation",
           content = {@Content(mediaType = "application/json",
-              schema = @Schema(implementation = ReservationInfoResponse.class))}),
+              schema = @Schema(implementation = ReservationInfoResponseDTO.class))}),
       @ApiResponse(responseCode = "404", description = "Not Found",
           content = @Content)})
-  List<ReservationInfoResponse> getByUser(@PathVariable String id);
+  List<ReservationInfoResponseDTO> getByUser(@PathVariable String id);
 
   @GetMapping
   @ApiResponse(responseCode = "200", description = "Get reservation",
       content = {@Content(mediaType = "application/json",
-          schema = @Schema(implementation = ReservationInfoResponse.class))})
-  List<ReservationInfoResponse> get(@RequestParam Instant from, @RequestParam Instant to);
+          schema = @Schema(implementation = ReservationInfoResponseDTO.class))})
+  List<ReservationInfoResponseDTO> get(@RequestParam Instant from, @RequestParam Instant to);
 }

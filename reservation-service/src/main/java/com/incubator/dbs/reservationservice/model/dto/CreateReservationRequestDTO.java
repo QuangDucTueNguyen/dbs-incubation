@@ -1,28 +1,26 @@
 package com.incubator.dbs.reservationservice.model.dto;
 
-import com.incubator.dbs.reservationservice.model.constant.ReservationStatus;
 import java.time.Instant;
-import java.util.UUID;
+import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode
-public class ReservationInfoResponse {
-
-  private UUID id;
+public class CreateReservationRequestDTO {
+  @NotNull
   private Integer hotelId;
+  @NotNull
   private Integer roomTypeId;
+  @NotNull
   private Integer numberRooms;
-  private Double total;
+  @NotNull
   private Instant from;
+  @NotNull
   private Instant to;
-  private Instant createdTime;
-  private ReservationStatus status;
+  private String userId;
 }

@@ -1,25 +1,34 @@
 package com.incubator.dbs.reservationservice.controller;
 
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.incubator.dbs.reservationservice.model.constant.ReservationStatus;
-import com.incubator.dbs.reservationservice.model.dto.CreateReservationRequest;
-import com.incubator.dbs.reservationservice.model.dto.ReservationInfoResponse;
-import com.incubator.dbs.reservationservice.model.dto.UpdateReservationRequest;
+import com.incubator.dbs.reservationservice.model.dto.CreateReservationRequestDTO;
+import com.incubator.dbs.reservationservice.model.dto.ReservationInfoResponseDTO;
+import com.incubator.dbs.reservationservice.model.dto.UpdateReservationRequestDTO;
 import com.incubator.dbs.reservationservice.service.ReservationService;
 import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 import org.apache.commons.lang3.RandomUtils;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.MediaType;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-@ExtendWith(MockitoExtension.class)
+@RunWith(SpringJUnit4ClassRunner.class)
 public class ReservationControllerTest {
 
-  private final ReservationService reservationService;
-  private final ReservationController reservationController;
+  private ReservationService reservationService;
+  private ReservationController reservationController;
   private static final Instant from = Instant.now();
   private static final Instant to = from.plusMillis(5 * 24 * 60 * 60 * 100);
   private static final UUID USER_ID = UUID.randomUUID();
@@ -31,15 +40,23 @@ public class ReservationControllerTest {
   private static final Integer ROOM_TYPE_ID_2 = RandomUtils.nextInt();
   private static final Integer NUMBER_ROOMS = 5;
   private static final Double TOTAL = RandomUtils.nextDouble();
+  private ObjectMapper mapper;
 
-  public ReservationControllerTest() {
+  private MockMvc mockMvc;
+
+  @Before
+  public void setup() {
+    mapper = new ObjectMapper();
+    JavaTimeModule module = new JavaTimeModule();
+    mapper.registerModule(module);
     reservationService = Mockito.mock(ReservationService.class);
     reservationController = new ReservationController(reservationService);
+    mockMvc = standaloneSetup(reservationController).build();
   }
 
   @Test
-  void create_shouldWork() {
-    var request = CreateReservationRequest.builder()
+  public void create_shouldWork() throws Exception {
+    var request = CreateReservationRequestDTO.builder()
         .from(from)
         .to(to)
         .hotelId(HOTEL_ID_1)
@@ -47,7 +64,7 @@ public class ReservationControllerTest {
         .roomTypeId(ROOM_TYPE_ID_1)
         .userId(USER_ID.toString())
         .build();
-    var expected = ReservationInfoResponse.builder()
+    var expected = ReservationInfoResponseDTO.builder()
         .status(ReservationStatus.PENDING)
         .from(from)
         .to(to)
@@ -58,65 +75,68 @@ public class ReservationControllerTest {
         .total(TOTAL)
         .build();
     Mockito.when(reservationService.create(request)).thenReturn(expected);
-    var result = reservationController.create(request);
-    Assertions.assertNotNull(result);
-    Assertions.assertEquals(expected.getFrom(), result.getFrom());
-    Assertions.assertEquals(expected.getTo(), result.getTo());
-    Assertions.assertEquals(expected.getHotelId(), result.getHotelId());
-    Assertions.assertEquals(expected.getRoomTypeId(), result.getRoomTypeId());
-    Assertions.assertEquals(expected.getNumberRooms(), result.getNumberRooms());
-    Assertions.assertEquals(expected.getStatus(), ReservationStatus.PENDING);
-    Assertions.assertEquals(expected.getTotal(), TOTAL);
+    mockMvc.perform(
+        MockMvcRequestBuilders.post("/api/reservations")
+            .content(this.mapper.writeValueAsString(request))
+            .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isCreated())
+        .andExpect(content().string(this.mapper.writeValueAsString(expected)));
   }
 
   @Test
-  void update_shouldWork() {
+  public void update_shouldWork() throws Exception {
     var id = RESERVATION_ID_1;
-    var request = UpdateReservationRequest.builder()
+    var request = UpdateReservationRequestDTO.builder()
         .status(ReservationStatus.PAID.getValue())
         .build();
-    var expected = ReservationInfoResponse.builder()
+    var expected = ReservationInfoResponseDTO.builder()
         .id(id)
         .status(ReservationStatus.PAID)
         .build();
     Mockito.when(reservationService.update(id.toString(), request)).thenReturn(expected);
-    var result = reservationController.update(id.toString(), request);
-    Assertions.assertNotNull(result);
-    Assertions.assertEquals(expected.getStatus(), ReservationStatus.PAID);
+    mockMvc.perform(
+        MockMvcRequestBuilders.patch(String.format("/api/reservations/%s", id.toString()))
+            .content(this.mapper.writeValueAsString(request))
+            .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isOk())
+        .andExpect(content().string(this.mapper.writeValueAsString(expected)));
   }
 
   @Test
-  void delete_shouldWork() {
+  public void delete_shouldWork() throws Exception {
     var id = RESERVATION_ID_1.toString();
     reservationController.delete(id);
-    Mockito.verify(reservationService, Mockito.times(1)).delete(id);
+    mockMvc.perform(
+        MockMvcRequestBuilders.delete(String.format("/api/reservations/%s", id))
+            .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isNoContent());
   }
 
   @Test
-  void getByUser_shouldWork() {
-    var reservation1 = ReservationInfoResponse.builder()
+  public void getByUser_shouldWork() throws Exception {
+    var reservation1 = ReservationInfoResponseDTO.builder()
         .hotelId(HOTEL_ID_1)
         .roomTypeId(ROOM_TYPE_ID_1)
         .id(RESERVATION_ID_1)
         .build();
-    var reservation2 = ReservationInfoResponse.builder()
+    var reservation2 = ReservationInfoResponseDTO.builder()
         .hotelId(HOTEL_ID_2)
         .roomTypeId(ROOM_TYPE_ID_2)
         .id(RESERVATION_ID_2)
         .build();
     var expected = List.of(reservation1, reservation2);
     Mockito.when(reservationService.getByUser(USER_ID.toString())).thenReturn(expected);
-    var result = reservationController.getByUser(USER_ID.toString());
 
-    Assertions.assertEquals(expected.size(), result.size());
-    Assertions.assertEquals(expected.get(0), result.get(0));
-    Assertions.assertEquals(expected.get(1), result.get(1));
-
+    mockMvc.perform(
+        MockMvcRequestBuilders.get(String.format("/api/reservations/users/%s/history", USER_ID.toString()))
+            .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isOk())
+        .andExpect(content().string(this.mapper.writeValueAsString(expected)));
   }
 
   @Test
-  void get_shouldWork() {
-    var reservation1 = ReservationInfoResponse.builder()
+  public void get_shouldWork() throws Exception {
+    var reservation1 = ReservationInfoResponseDTO.builder()
         .from(from)
         .to(to)
         .hotelId(HOTEL_ID_1)
@@ -124,7 +144,7 @@ public class ReservationControllerTest {
         .roomTypeId(ROOM_TYPE_ID_1)
         .id(RESERVATION_ID_1)
         .build();
-    var reservation2 = ReservationInfoResponse.builder()
+    var reservation2 = ReservationInfoResponseDTO.builder()
         .from(from)
         .to(to)
         .hotelId(HOTEL_ID_2)
@@ -134,9 +154,12 @@ public class ReservationControllerTest {
         .build();
     var expected = List.of(reservation1, reservation2);
     Mockito.when(reservationService.get(from, to)).thenReturn(expected);
-    var result = reservationController.get(from, to);
-    Assertions.assertEquals(expected.size(), result.size());
-    Assertions.assertEquals(expected.get(0), result.get(0));
-    Assertions.assertEquals(expected.get(1), result.get(1));
+    mockMvc.perform(
+        MockMvcRequestBuilders.get(String.format("/api/reservations"))
+            .param("from", from.toString())
+            .param("to", to.toString())
+            .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isOk())
+        .andExpect(content().string(this.mapper.writeValueAsString(expected)));
   }
 }
