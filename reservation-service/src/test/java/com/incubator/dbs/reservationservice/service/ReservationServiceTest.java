@@ -239,7 +239,7 @@ class ReservationServiceTest {
   }
 
   @Test
-  void get() {
+  void get_shouldWork() {
     var entity1 = Reservation.builder()
         .createdTime(Instant.now())
         .userId(USER_ID)
@@ -280,7 +280,8 @@ class ReservationServiceTest {
         .build();
     var userReservationEntities = List.of(entity1, entity2);
     var expected = List.of(reservation1, reservation2);
-    Mockito.when(reservationRepository.findAllByInArrangeTime(from, to)).thenReturn(userReservationEntities);
+    Mockito.when(reservationRepository.findAllByFromDateAfterAndToDateBefore(from, to))
+        .thenReturn(userReservationEntities);
     var result = reservationService.get(from, to);
 
     Assertions.assertEquals(expected, result);

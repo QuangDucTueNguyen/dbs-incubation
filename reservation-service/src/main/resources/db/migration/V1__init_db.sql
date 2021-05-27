@@ -6,8 +6,8 @@ CREATE TABLE IF NOT EXISTS public.reservation
     room_type_id integer NOT NULL,
     created_time timestamp with time zone,
     update_time timestamp with time zone,
-    fromDate date NOT NULL,
-    toDate date NOT NULL,
+    from_date date NOT NULL,
+    to_date date NOT NULL,
     status varchar NOT NULL,
     total money NOT NULL,
     number_rooms integer NOT NULL

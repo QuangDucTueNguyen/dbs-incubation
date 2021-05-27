@@ -107,7 +107,7 @@ public class ReservationServiceImpl implements ReservationService {
   @Override
   public List<ReservationInfoResponseDTO> get(Instant from, Instant to) {
     log.info("Get reservation from {} - to {}", from, to);
-    return reservationRepository.findAllByInArrangeTime(from, to)
+    return reservationRepository.findAllByFromDateAfterAndToDateBefore(from, to)
         .stream()
         .map(this::toReservationInfo)
         .collect(Collectors.toList());
