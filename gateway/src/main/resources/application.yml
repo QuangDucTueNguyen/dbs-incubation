@@ -1,1 +1,27 @@
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+      routes:
+        - id: guest-service
+          uri: lb://guest-service
+          predicates:
+            - Path=/api/guests/**
+        - id: reservation-service
+          uri: lb://reservation-service
+          predicates:
+            - Path=/api/reservations/**
+        - id: reservation-service
+          uri: lb://hotel-service
+          predicates:
+            - Path=/api/hotels/**
+            - Path=/api/rooms/**
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
 
+server:
+  port: 7999

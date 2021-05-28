@@ -1,5 +1,6 @@
 package com.incubator.dbs.guestservice.utility;
 
+import com.incubator.dbs.guestservice.model.dto.UserCredentialDto;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import java.io.Serializable;
@@ -7,7 +8,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -20,7 +20,7 @@ public class JWTUtility implements Serializable {
   @Value("${jwt.secret}")
   private String secretKey;
 
-  public String generateToken(UserDetails userDetails) {
+  public String generateToken(UserCredentialDto userDetails) {
     Map<String, Object> claims = new HashMap<>();
     return doGenerateToken(claims, userDetails.getUsername());
   }

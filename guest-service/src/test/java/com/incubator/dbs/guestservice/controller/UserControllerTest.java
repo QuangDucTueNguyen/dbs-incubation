@@ -6,7 +6,7 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standal
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.incubator.dbs.guestservice.model.dto.GuestInfoResponse;
+import com.incubator.dbs.guestservice.model.dto.GuestInfoResponseDto;
 import com.incubator.dbs.guestservice.model.dto.LoginRequestDto;
 import com.incubator.dbs.guestservice.model.dto.LoginResponseDto;
 import com.incubator.dbs.guestservice.model.dto.SignUpRequestDto;
@@ -84,7 +84,7 @@ public class UserControllerTest {
 
   @Test
   public void get_shouldWork() throws Exception {
-    var expected = GuestInfoResponse.builder()
+    var expected = GuestInfoResponseDto.builder()
         .username(USERNAME)
         .id(USER_ID)
         .phoneNumber(PHONE_NUMBER)

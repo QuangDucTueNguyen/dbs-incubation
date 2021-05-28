@@ -1,6 +1,6 @@
 package com.incubator.dbs.guestservice.controller;
 
-import com.incubator.dbs.guestservice.model.dto.GuestInfoResponse;
+import com.incubator.dbs.guestservice.model.dto.GuestInfoResponseDto;
 import com.incubator.dbs.guestservice.model.dto.LoginRequestDto;
 import com.incubator.dbs.guestservice.model.dto.LoginResponseDto;
 import com.incubator.dbs.guestservice.model.dto.SignUpRequestDto;
@@ -35,7 +35,7 @@ public class UserController implements UserOperation {
   }
 
   @Override
-  public GuestInfoResponse get(String id) {
+  public GuestInfoResponseDto get(String id) {
     return userService.get(id);
   }
 
