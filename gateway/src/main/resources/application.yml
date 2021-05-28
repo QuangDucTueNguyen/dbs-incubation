@@ -17,6 +17,17 @@ spring:
           predicates:
             - Path=/api/hotels/**
             - Path=/api/rooms/**
+eureka:
+  client:
+    healthcheck:
+      enabled: true
+    registerWithEureka: true
+    fetchRegistry: true
+    serviceUrl:
+      defaultZone: ${EUREKA_SERVER_HOST}
+  instance:
+    hostName: ${spring.application.name}
+
 management:
   endpoints:
     web:
