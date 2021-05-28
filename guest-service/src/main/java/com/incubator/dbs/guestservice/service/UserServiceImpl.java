@@ -2,7 +2,7 @@ package com.incubator.dbs.guestservice.service;
 
 import com.incubator.dbs.guestservice.exception.GuestErrorResponse;
 import com.incubator.dbs.guestservice.exception.GuestServiceException;
-import com.incubator.dbs.guestservice.model.dto.GuestInfoResponse;
+import com.incubator.dbs.guestservice.model.dto.GuestInfoResponseDto;
 import com.incubator.dbs.guestservice.model.dto.LoginRequestDto;
 import com.incubator.dbs.guestservice.model.dto.LoginResponseDto;
 import com.incubator.dbs.guestservice.model.dto.SignUpRequestDto;
@@ -15,7 +15,6 @@ import com.incubator.dbs.guestservice.utility.JWTUtility;
 import java.util.Objects;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -24,17 +23,17 @@ public class UserServiceImpl implements UserService {
 
 
   private final JWTUtility jwtUtility;
-  private final UserDetailsService userDetailsService;
+  private final UserCredential userCredential;
   private final UserProfileRepository userProfileRepository;
   private final PasswordRepository passwordRepository;
   private static final int RANDOM_PASSWORD_LENGTH = 6;
 
   public UserServiceImpl(JWTUtility jwtUtility,
-      UserDetailsService userDetailsService,
+      UserCredential userCredential,
       UserProfileRepository userProfileRepository,
       PasswordRepository passwordRepository) {
     this.jwtUtility = jwtUtility;
-    this.userDetailsService = userDetailsService;
+    this.userCredential = userCredential;
     this.userProfileRepository = userProfileRepository;
     this.passwordRepository = passwordRepository;
   }
@@ -42,7 +41,7 @@ public class UserServiceImpl implements UserService {
   @Override
   public LoginResponseDto login(LoginRequestDto request) {
     log.info("User [{}] request log in.", request);
-    final var userDetails = userDetailsService.loadUserByUsername(request.getUsername());
+    final var userDetails = userCredential.loadUserByUsername(request.getUsername());
     if (!Objects.equals(request.getPassword(), userDetails.getPassword())) {
       throw new GuestServiceException(GuestErrorResponse.NOT_AUTHORIZED);
     }
@@ -79,7 +78,7 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public GuestInfoResponse get(String id) {
+  public GuestInfoResponseDto get(String id) {
     log.info("get user [{}]", id);
     return userProfileRepository.findById(id)
         .map(this::convertToGuestInfo)
@@ -95,8 +94,8 @@ public class UserServiceImpl implements UserService {
     userProfileRepository.deleteById(id);
   }
 
-  private GuestInfoResponse convertToGuestInfo(UserProfile userProfile){
-    return GuestInfoResponse.builder()
+  private GuestInfoResponseDto convertToGuestInfo(UserProfile userProfile){
+    return GuestInfoResponseDto.builder()
         .id(userProfile.getId())
         .creditCard(userProfile.getCreditCard())
         .address(userProfile.getAddress())

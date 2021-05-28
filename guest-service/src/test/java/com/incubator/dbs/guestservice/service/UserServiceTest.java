@@ -1,13 +1,13 @@
 package com.incubator.dbs.guestservice.service;
 
-import com.incubator.dbs.guestservice.model.dto.GuestInfoResponse;
+import com.incubator.dbs.guestservice.model.dto.GuestInfoResponseDto;
 import com.incubator.dbs.guestservice.model.dto.LoginRequestDto;
 import com.incubator.dbs.guestservice.model.dto.SignUpRequestDto;
+import com.incubator.dbs.guestservice.model.dto.UserCredentialDto;
 import com.incubator.dbs.guestservice.model.entity.UserProfile;
 import com.incubator.dbs.guestservice.repository.PasswordRepository;
 import com.incubator.dbs.guestservice.repository.UserProfileRepository;
 import com.incubator.dbs.guestservice.utility.JWTUtility;
-import java.util.Collections;
 import java.util.Optional;
 import java.util.UUID;
 import org.junit.jupiter.api.Assertions;
@@ -15,11 +15,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.util.StringUtils;
 
@@ -34,18 +29,18 @@ class UserServiceTest {
   private final String SECRET_KEY = "SECRET_KEY";
   private final UUID USER_ID = UUID.randomUUID();
   private final UserService userService;
-  private UserDetailsService userDetailsService;
+  private UserCredential userCredential;
   private UserProfileRepository userProfileRepository;
   private PasswordRepository passwordRepository;
   private JWTUtility jwtUtility;
 
   public UserServiceTest() {
-    userDetailsService = Mockito.mock(UserDetailsService.class);
+    userCredential = Mockito.mock(UserCredential.class);
     userProfileRepository = Mockito.mock(UserProfileRepository.class);
     passwordRepository = Mockito.mock(PasswordRepository.class);
     jwtUtility = new JWTUtility();
     ReflectionTestUtils.setField(jwtUtility, "secretKey", SECRET_KEY);
-    userService = new UserServiceImpl(jwtUtility, userDetailsService, userProfileRepository,
+    userService = new UserServiceImpl(jwtUtility, userCredential, userProfileRepository,
         passwordRepository);
   }
 
@@ -61,8 +56,8 @@ class UserServiceTest {
   @Test
   void login_shouldWork() {
     var loginRequest = LoginRequestDto.builder().username(USERNAME).password(PASSWORD).build();
-    UserDetails userDetails = new User(USERNAME, PASSWORD, Collections.emptyList());
-    Mockito.when(userDetailsService.loadUserByUsername(USERNAME)).thenReturn(userDetails);
+    UserCredentialDto userDetails = new UserCredentialDto(USERNAME, PASSWORD);
+    Mockito.when(userCredential.loadUserByUsername(USERNAME)).thenReturn(userDetails);
     var result = userService.login(loginRequest);
     Assertions.assertNotNull(result.getAccessToken());
   }
@@ -80,7 +75,7 @@ class UserServiceTest {
         .username(USERNAME)
         .phoneNumber(PHONE_NUMBER)
         .build();
-    var expected = GuestInfoResponse.builder()
+    var expected = GuestInfoResponseDto.builder()
         .username(USERNAME)
         .id(USER_ID)
         .phoneNumber(PHONE_NUMBER)

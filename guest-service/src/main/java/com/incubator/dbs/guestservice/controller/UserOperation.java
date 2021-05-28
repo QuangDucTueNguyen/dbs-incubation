@@ -1,6 +1,6 @@
 package com.incubator.dbs.guestservice.controller;
 
-import com.incubator.dbs.guestservice.model.dto.GuestInfoResponse;
+import com.incubator.dbs.guestservice.model.dto.GuestInfoResponseDto;
 import com.incubator.dbs.guestservice.model.dto.LoginRequestDto;
 import com.incubator.dbs.guestservice.model.dto.LoginResponseDto;
 import com.incubator.dbs.guestservice.model.dto.SignUpRequestDto;
@@ -59,10 +59,10 @@ public interface UserOperation {
   @ApiResponses(value = {
       @ApiResponse(responseCode = "200", description = "Get User info",
           content = {@Content(mediaType = "application/json",
-              schema = @Schema(implementation = GuestInfoResponse.class))}),
+              schema = @Schema(implementation = GuestInfoResponseDto.class))}),
       @ApiResponse(responseCode = "404", description = "Not found",
           content = @Content)})
-  GuestInfoResponse get(@PathVariable String id);
+  GuestInfoResponseDto get(@PathVariable String id);
 
   /**
    * delete guest

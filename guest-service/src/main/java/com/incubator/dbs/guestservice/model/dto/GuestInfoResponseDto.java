@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @EqualsAndHashCode
-public class GuestInfoResponse {
+public class GuestInfoResponseDto {
 
   private UUID id;
   private String username;
