@@ -9,6 +9,13 @@ spring:
     enabled: true
   application:
     name: guest-service
+  sleuth:
+    sampler:
+      percentage: 1.0
+  zipkin:
+    base-url: ${ZIPKIN_URL}
+    sender:
+      type: web
 
 jwt:
   secret: ${JWT_SECRET_KEY}
@@ -23,7 +30,6 @@ eureka:
       defaultZone: ${EUREKA_SERVER_HOST}
   instance:
     hostName: ${spring.application.name}
-
 server:
   port: 8082
 

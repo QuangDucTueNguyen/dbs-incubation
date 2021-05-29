@@ -9,6 +9,14 @@ spring:
     enabled: true
   application:
     name: reservation-service
+  sleuth:
+    sampler:
+      percentage: 1.0
+  zipkin:
+    base-url: ${ZIPKIN_URL}
+    sender:
+      type: web
+
 eureka:
   client:
     healthcheck:

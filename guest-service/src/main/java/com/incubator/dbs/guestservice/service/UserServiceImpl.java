@@ -40,7 +40,7 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public LoginResponseDto login(LoginRequestDto request) {
-    log.info("User [{}] request log in.", request);
+    log.info("User [{}] request log in.", request.getUsername());
     final var userDetails = userCredential.loadUserByUsername(request.getUsername());
     if (!Objects.equals(request.getPassword(), userDetails.getPassword())) {
       throw new GuestServiceException(GuestErrorResponse.NOT_AUTHORIZED);
