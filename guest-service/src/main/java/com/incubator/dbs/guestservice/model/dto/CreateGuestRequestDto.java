@@ -10,9 +10,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class SignUpRequestDto {
+public class CreateGuestRequestDto {
   @NotBlank
-  private String username;
   private String name;
   private String address;
   private String phoneNumber;

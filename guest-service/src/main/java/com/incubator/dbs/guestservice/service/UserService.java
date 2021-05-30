@@ -1,10 +1,7 @@
 package com.incubator.dbs.guestservice.service;
 
 import com.incubator.dbs.guestservice.model.dto.GuestInfoResponseDto;
-import com.incubator.dbs.guestservice.model.dto.LoginRequestDto;
-import com.incubator.dbs.guestservice.model.dto.LoginResponseDto;
-import com.incubator.dbs.guestservice.model.dto.SignUpRequestDto;
-import com.incubator.dbs.guestservice.model.dto.SignupResponseDto;
+import com.incubator.dbs.guestservice.model.dto.CreateGuestRequestDto;
 
 /**
  * User service
@@ -12,18 +9,11 @@ import com.incubator.dbs.guestservice.model.dto.SignupResponseDto;
 public interface UserService {
 
   /**
-   * Log in
+   * create user profile
    * @param request
    * @return
    */
-  LoginResponseDto login(LoginRequestDto request);
-
-  /**
-   * Signup
-   * @param request
-   * @return
-   */
-  SignupResponseDto signUp(SignUpRequestDto request);
+  GuestInfoResponseDto create(CreateGuestRequestDto request);
 
   /**
    * Get User Info

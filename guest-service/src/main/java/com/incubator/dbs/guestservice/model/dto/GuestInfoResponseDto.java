@@ -16,7 +16,6 @@ import lombok.NoArgsConstructor;
 public class GuestInfoResponseDto {
 
   private UUID id;
-  private String username;
   private String name;
   private String address;
   private BigInteger creditCard;

@@ -1,13 +1,9 @@
 package com.incubator.dbs.guestservice.service;
 
+import com.incubator.dbs.guestservice.model.dto.CreateGuestRequestDto;
 import com.incubator.dbs.guestservice.model.dto.GuestInfoResponseDto;
-import com.incubator.dbs.guestservice.model.dto.LoginRequestDto;
-import com.incubator.dbs.guestservice.model.dto.SignUpRequestDto;
-import com.incubator.dbs.guestservice.model.dto.UserCredentialDto;
 import com.incubator.dbs.guestservice.model.entity.UserProfile;
-import com.incubator.dbs.guestservice.repository.PasswordRepository;
 import com.incubator.dbs.guestservice.repository.UserProfileRepository;
-import com.incubator.dbs.guestservice.utility.JWTUtility;
 import java.util.Optional;
 import java.util.UUID;
 import org.junit.jupiter.api.Assertions;
@@ -15,8 +11,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.test.util.ReflectionTestUtils;
-import org.springframework.util.StringUtils;
 
 @ExtendWith({MockitoExtension.class})
 class UserServiceTest {
@@ -29,37 +23,36 @@ class UserServiceTest {
   private final String SECRET_KEY = "SECRET_KEY";
   private final UUID USER_ID = UUID.randomUUID();
   private final UserService userService;
-  private UserCredential userCredential;
   private UserProfileRepository userProfileRepository;
-  private PasswordRepository passwordRepository;
-  private JWTUtility jwtUtility;
 
   public UserServiceTest() {
-    userCredential = Mockito.mock(UserCredential.class);
     userProfileRepository = Mockito.mock(UserProfileRepository.class);
-    passwordRepository = Mockito.mock(PasswordRepository.class);
-    jwtUtility = new JWTUtility();
-    ReflectionTestUtils.setField(jwtUtility, "secretKey", SECRET_KEY);
-    userService = new UserServiceImpl(jwtUtility, userCredential, userProfileRepository,
-        passwordRepository);
+
+    userService = new UserServiceImpl( userProfileRepository);
   }
 
   @Test
-  void signUp_shouldWork() {
-    var signUpRequest = SignUpRequestDto.builder().name(NAME).address(ADDRESS).phoneNumber(PHONE_NUMBER)
-        .username(USERNAME).build();
-    Mockito.when(userProfileRepository.findOneByUsername(USERNAME)).thenReturn(Optional.empty());
-    var result = userService.signUp(signUpRequest);
-    Assertions.assertFalse(StringUtils.isEmpty(result));
-  }
+  void create_shouldWork() {
+    var request = CreateGuestRequestDto.builder()
+        .name(NAME)
+        .address(ADDRESS)
+        .phoneNumber(PHONE_NUMBER)
+        .build();
 
-  @Test
-  void login_shouldWork() {
-    var loginRequest = LoginRequestDto.builder().username(USERNAME).password(PASSWORD).build();
-    UserCredentialDto userDetails = new UserCredentialDto(USERNAME, PASSWORD);
-    Mockito.when(userCredential.loadUserByUsername(USERNAME)).thenReturn(userDetails);
-    var result = userService.login(loginRequest);
-    Assertions.assertNotNull(result.getAccessToken());
+    var profile = UserProfile.builder()
+        .address(request.getAddress())
+        .name(request.getName())
+        .phoneNumber(request.getPhoneNumber())
+        .build();
+
+    var expected = GuestInfoResponseDto.builder()
+        .address(profile.getAddress())
+        .name(profile.getName())
+        .phoneNumber(profile.getPhoneNumber())
+        .build();
+    Mockito.when(userProfileRepository.save(profile)).thenReturn(profile);
+    var result = userService.create(request);
+    Assertions.assertEquals(expected, result);
   }
 
   @Test
@@ -72,11 +65,9 @@ class UserServiceTest {
   void get_shouldWork() {
     var guestEntity = UserProfile.builder()
         .id(USER_ID)
-        .username(USERNAME)
         .phoneNumber(PHONE_NUMBER)
         .build();
     var expected = GuestInfoResponseDto.builder()
-        .username(USERNAME)
         .id(USER_ID)
         .phoneNumber(PHONE_NUMBER)
         .build();
