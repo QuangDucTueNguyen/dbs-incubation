@@ -16,10 +16,10 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-class RoomControllerTest {
+class RoomsControllerTest {
 
   private final RoomService roomService;
-  private final RoomController roomController;
+  private final RoomsController roomController;
   private final Integer ROOM_ID_1 = new Random().nextInt();
   private final String ROOM_NAME_1 = "ROOM_NAME_1";
   private final Integer HOTEL_ID = Integer.MAX_VALUE;
@@ -34,9 +34,9 @@ class RoomControllerTest {
   private final Instant from = Instant.now();
   private final Instant to = Instant.now().plusMillis(5 * 24 * 60 * 60 * 100);
 
-  public RoomControllerTest() {
+  public RoomsControllerTest() {
     roomService = Mockito.mock(RoomService.class);
-    roomController = new RoomController(roomService);
+    roomController = new RoomsController(roomService);
   }
 
   @Test

@@ -19,9 +19,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-public class UserControllerTest {
+public class GuestsControllerTest {
 
-  private UserOperation userOperation;
+  private GuestsOperation userOperation;
   private UserService userService;
   private final String USERNAME = "USERNAME";
   private final String PASSWORD = "PASSWORD";
@@ -35,12 +35,12 @@ public class UserControllerTest {
 
   private MockMvc mockMvc;
 
-  public UserControllerTest() {
+  public GuestsControllerTest() {
     mapper = new ObjectMapper();
     JavaTimeModule module = new JavaTimeModule();
     mapper.registerModule(module);
     userService = Mockito.mock(UserService.class);
-    userOperation = new UserController(userService);
+    userOperation = new GuestsController(userService);
     mockMvc = standaloneSetup(userOperation).build();
   }
 

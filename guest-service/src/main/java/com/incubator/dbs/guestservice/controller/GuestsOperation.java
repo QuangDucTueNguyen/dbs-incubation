@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * User operation
  */
 @RequestMapping("/api/guests")
-public interface UserOperation {
+public interface GuestsOperation {
 
   /**
    * Register user info
