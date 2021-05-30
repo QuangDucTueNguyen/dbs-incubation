@@ -1,10 +1,7 @@
 package com.incubator.dbs.guestservice.controller;
 
+import com.incubator.dbs.guestservice.model.dto.CreateGuestRequestDto;
 import com.incubator.dbs.guestservice.model.dto.GuestInfoResponseDto;
-import com.incubator.dbs.guestservice.model.dto.LoginRequestDto;
-import com.incubator.dbs.guestservice.model.dto.LoginResponseDto;
-import com.incubator.dbs.guestservice.model.dto.SignUpRequestDto;
-import com.incubator.dbs.guestservice.model.dto.SignupResponseDto;
 import com.incubator.dbs.guestservice.service.UserService;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,14 +21,9 @@ public class UserController implements UserOperation {
   }
 
   @Override
-  public LoginResponseDto login(@RequestBody LoginRequestDto request) {
-    return userService.login(request);
-  }
-
-  @Override
   @ResponseStatus(HttpStatus.CREATED)
-  public SignupResponseDto signUp(@Valid @RequestBody SignUpRequestDto request) {
-    return userService.signUp(request);
+  public GuestInfoResponseDto signUp(@Valid @RequestBody CreateGuestRequestDto request) {
+    return userService.create(request);
   }
 
   @Override

@@ -7,10 +7,7 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standal
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.incubator.dbs.guestservice.model.dto.GuestInfoResponseDto;
-import com.incubator.dbs.guestservice.model.dto.LoginRequestDto;
-import com.incubator.dbs.guestservice.model.dto.LoginResponseDto;
-import com.incubator.dbs.guestservice.model.dto.SignUpRequestDto;
-import com.incubator.dbs.guestservice.model.dto.SignupResponseDto;
+import com.incubator.dbs.guestservice.model.dto.CreateGuestRequestDto;
 import com.incubator.dbs.guestservice.service.UserService;
 import java.util.UUID;
 import org.junit.Test;
@@ -48,31 +45,26 @@ public class UserControllerTest {
   }
 
   @Test
-  public void signUp_shouldWork() throws Exception {
-    var signUpRequest = SignUpRequestDto.builder().name(NAME).address(ADDRESS).phoneNumber(PHONE_NUMBER)
-        .username(USERNAME).build();
-    var expected = SignupResponseDto.builder().defaultPassword(DEFAULT_PASSWORD).build();
-    Mockito.when(userService.signUp(signUpRequest)).thenReturn(expected);
+  public void create_shouldWork() throws Exception {
+    var request = CreateGuestRequestDto.builder()
+        .name(NAME)
+        .address(ADDRESS)
+        .phoneNumber(PHONE_NUMBER)
+        .build();
+    var expected = GuestInfoResponseDto.builder()
+        .address(request.getAddress())
+        .name(request.getName())
+        .phoneNumber(request.getPhoneNumber())
+        .build();
+    Mockito.when(userService.create(request)).thenReturn(expected);
     mockMvc.perform(
-        MockMvcRequestBuilders.post("/api/guests/signup")
-            .content(this.mapper.writeValueAsString(signUpRequest))
+        MockMvcRequestBuilders.post("/api/guests")
+            .content(this.mapper.writeValueAsString(request))
             .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isCreated())
         .andExpect(content().string(this.mapper.writeValueAsString(expected)));
   }
 
-  @Test
-  public void login_shouldWork() throws Exception {
-    var loginRequest = LoginRequestDto.builder().username(USERNAME).password(PASSWORD).build();
-    var expected = LoginResponseDto.builder().accessToken(ACCESS_TOKEN).build();
-    Mockito.when(userService.login(loginRequest)).thenReturn(expected);
-    mockMvc.perform(
-        MockMvcRequestBuilders.post("/api/guests/login")
-            .content(this.mapper.writeValueAsString(loginRequest))
-            .contentType(MediaType.APPLICATION_JSON))
-        .andExpect(status().isOk())
-        .andExpect(content().string(this.mapper.writeValueAsString(expected)));
-  }
 
   @Test
   public void delete_shouldWork() throws Exception {
@@ -85,7 +77,6 @@ public class UserControllerTest {
   @Test
   public void get_shouldWork() throws Exception {
     var expected = GuestInfoResponseDto.builder()
-        .username(USERNAME)
         .id(USER_ID)
         .phoneNumber(PHONE_NUMBER)
         .build();
