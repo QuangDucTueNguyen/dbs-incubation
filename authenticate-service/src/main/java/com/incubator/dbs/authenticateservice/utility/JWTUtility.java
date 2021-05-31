@@ -7,6 +7,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -15,6 +16,7 @@ public class JWTUtility implements Serializable {
 
   private static final long serialVersionUID = 234234523523L;
   private static final String PREFERRED_USERNAME = "preferred_username";
+  private static final String ROLES = "roles";
   private static final long JWT_TOKEN_VALIDITY = 5 * 60 * 60L;
 
   @Value("${jwt.secret}")
@@ -23,6 +25,8 @@ public class JWTUtility implements Serializable {
   public String generateToken(CredentialEntity credentialEntity) {
     Map<String, Object> claims = new HashMap<>();
     claims.putIfAbsent(PREFERRED_USERNAME, credentialEntity.getUsername());
+    claims.putIfAbsent(ROLES, credentialEntity.getUserRoleEntities().stream()
+        .map(ur -> ur.getRole().getName()).collect(Collectors.toList()));
     return doGenerateToken(claims, credentialEntity.getGuestId().toString());
   }
 

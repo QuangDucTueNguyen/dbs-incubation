@@ -1,5 +1,6 @@
 package com.incubator.dbs.authenticateservice.model.dto;
 
+import com.incubator.dbs.authenticateservice.model.constant.RoleName;
 import javax.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,4 +17,5 @@ public class SignUpRequestDto {
   private String name;
   private String address;
   private String phoneNumber;
+  private RoleName role;
 }

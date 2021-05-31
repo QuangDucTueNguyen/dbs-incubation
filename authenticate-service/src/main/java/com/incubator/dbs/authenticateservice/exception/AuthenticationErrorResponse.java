@@ -6,7 +6,8 @@ public enum AuthenticationErrorResponse {
   UNHANDLED_EXCEPTION(HttpStatus.INTERNAL_SERVER_ERROR, "4000", "Unhandled exception."),
   NOT_AUTHORIZED(HttpStatus.FORBIDDEN, "4001", "Not authorized."),
   INVALID_VALUE(HttpStatus.BAD_REQUEST, "4002", "Invalid parameter."),
-  USER_EXIST(HttpStatus.BAD_REQUEST, "4003", "User is existing.");
+  USER_EXIST(HttpStatus.BAD_REQUEST, "4003", "User is existing."),
+  INVALID_ROLE(HttpStatus.BAD_REQUEST, "4004", "Invalid role.");
 
   private HttpStatus httpStatus;
   private String errorCode;

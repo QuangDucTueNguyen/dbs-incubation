@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 @CircuitBreaker(name = "auth")
 @Retry(name = "auth")
 @RateLimiter(name = "auth")
-@TimeLimiter(name = "auth")
 @Bulkhead(name = "auth")
 public class AuthenticationController implements AuthenticationOperations {
 

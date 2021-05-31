@@ -1,8 +1,10 @@
 package com.incubator.dbs.authenticateservice.model.entity;
 
+import com.incubator.dbs.authenticateservice.model.constant.RoleName;
 import java.util.List;
-import java.util.UUID;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -18,15 +20,15 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "user_credential", schema = "public")
-public class CredentialEntity {
+@Table(name = "roles", schema = "public")
+public class RoleEntity {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
-  private UUID id;
-  private String username;
-  private UUID guestId;
-  private String password;
-  @OneToMany(mappedBy = "userCredential", targetEntity = UserRoleEntity.class)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Integer id;
+  @Enumerated(EnumType.STRING)
+  private RoleName name;
+  private String description;
+  @OneToMany(mappedBy = "role", targetEntity = UserRoleEntity.class)
   private List<UserRoleEntity> userRoleEntities;
 }
