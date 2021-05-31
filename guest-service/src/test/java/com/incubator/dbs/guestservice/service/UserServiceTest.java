@@ -57,8 +57,8 @@ class UserServiceTest {
 
   @Test
   void delete_shouldWork() {
-    userService.delete(USER_ID.toString());
-    Mockito.verify(userProfileRepository, Mockito.times(1)).deleteById(USER_ID.toString());
+    userService.delete(USER_ID);
+    Mockito.verify(userProfileRepository, Mockito.times(1)).deleteById(USER_ID);
   }
 
   @Test
@@ -71,8 +71,8 @@ class UserServiceTest {
         .id(USER_ID)
         .phoneNumber(PHONE_NUMBER)
         .build();
-    Mockito.when(userProfileRepository.findById(USER_ID.toString())).thenReturn(Optional.of(guestEntity));
-    var result = userService.get(USER_ID.toString());
+    Mockito.when(userProfileRepository.findById(USER_ID)).thenReturn(Optional.of(guestEntity));
+    var result = userService.get(USER_ID);
     Assertions.assertEquals(expected, result);
   }
 }

@@ -80,7 +80,7 @@ public class UserControllerTest {
         .id(USER_ID)
         .phoneNumber(PHONE_NUMBER)
         .build();
-    Mockito.when(userService.get(USER_ID.toString())).thenReturn(expected);
+    Mockito.when(userService.get(USER_ID)).thenReturn(expected);
     mockMvc.perform(
         MockMvcRequestBuilders.get(String.format("/api/guests/%s", USER_ID.toString()))
             .contentType(MediaType.APPLICATION_JSON))

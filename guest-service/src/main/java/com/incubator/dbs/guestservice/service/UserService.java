@@ -2,6 +2,7 @@ package com.incubator.dbs.guestservice.service;
 
 import com.incubator.dbs.guestservice.model.dto.GuestInfoResponseDto;
 import com.incubator.dbs.guestservice.model.dto.CreateGuestRequestDto;
+import java.util.UUID;
 
 /**
  * User service
@@ -20,11 +21,11 @@ public interface UserService {
    * @param id
    * @return
    */
-  GuestInfoResponseDto get(String id);
+  GuestInfoResponseDto get(UUID id);
 
   /**
    * delete guest
    * @param id
    */
-  void delete(String id);
+  void delete(UUID id);
 }
