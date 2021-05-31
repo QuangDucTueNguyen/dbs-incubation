@@ -4,19 +4,25 @@ spring:
   cloud:
     gateway:
       routes:
-        - id: guest-service
+        - id: guests-service
           uri: lb://guest-service
           predicates:
             - Path=/api/guests/**
-        - id: reservation-service
+        - id: reservations-service
           uri: lb://reservation-service
           predicates:
             - Path=/api/reservations/**
-        - id: reservation-service
+        - id: hotels-service
           uri: lb://hotel-service
           predicates:
             - Path=/api/hotels/**
             - Path=/api/rooms/**
+        - id: authentication-service
+          uri: lb://authentication-service
+          predicates:
+          - Path=/api/auth/**
+      ignorePatterns:
+        - /api/auth**
 eureka:
   client:
     healthcheck:
@@ -36,3 +42,7 @@ management:
 
 server:
   port: 7999
+
+
+jwt:
+  secret: ${JWT_SECRET_KEY}
