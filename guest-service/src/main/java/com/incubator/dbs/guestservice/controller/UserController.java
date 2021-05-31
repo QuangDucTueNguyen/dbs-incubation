@@ -3,6 +3,7 @@ package com.incubator.dbs.guestservice.controller;
 import com.incubator.dbs.guestservice.model.dto.CreateGuestRequestDto;
 import com.incubator.dbs.guestservice.model.dto.GuestInfoResponseDto;
 import com.incubator.dbs.guestservice.service.UserService;
+import java.util.UUID;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,13 +28,13 @@ public class UserController implements UserOperation {
   }
 
   @Override
-  public GuestInfoResponseDto get(String id) {
+  public GuestInfoResponseDto get(UUID id) {
     return userService.get(id);
   }
 
   @Override
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  public void delete(String id) {
+  public void delete(UUID id) {
     userService.delete(id);
   }
 }
