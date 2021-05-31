@@ -114,11 +114,3 @@ resilience4j:
     instances:
       reservations:
         baseConfig: default
-  timelimiter:
-    configs:
-      default:
-        cancelRunningFuture: false
-        timeoutDuration: 2s
-    instances:
-      reservations:
-        baseConfig: default

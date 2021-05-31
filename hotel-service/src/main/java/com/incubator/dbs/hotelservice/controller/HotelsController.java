@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 @CircuitBreaker(name = "hotels")
 @Retry(name = "hotels")
 @RateLimiter(name = "hotels")
-@TimeLimiter(name = "hotels")
 @Bulkhead(name = "hotels")
 public class HotelsController implements HotelOperations {
 

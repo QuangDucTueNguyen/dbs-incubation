@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.RestController;
 @CircuitBreaker(name = "reservations")
 @Retry(name = "reservations")
 @RateLimiter(name = "reservations")
-@TimeLimiter(name = "reservations")
 @Bulkhead(name = "reservations")
 public class ReservationsController implements ReservationOperations {
 
