@@ -5,16 +5,26 @@ import com.incubator.dbs.hotelservice.model.dto.RoomInfoResponse;
 import com.incubator.dbs.hotelservice.model.dto.RoomTypeResponse;
 import com.incubator.dbs.hotelservice.model.dto.UpdateRoomRequest;
 import com.incubator.dbs.hotelservice.service.RoomService;
+import io.github.resilience4j.bulkhead.annotation.Bulkhead;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
+import io.github.resilience4j.retry.annotation.Retry;
+import io.github.resilience4j.timelimiter.annotation.TimeLimiter;
 import java.time.Instant;
 import java.util.List;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class RoomController implements RoomOperations {
+@CircuitBreaker(name = "rooms")
+@Retry(name = "rooms")
+@RateLimiter(name = "rooms")
+@TimeLimiter(name = "rooms")
+@Bulkhead(name = "rooms")
+public class RoomsController implements RoomOperations {
 
   private final RoomService roomService;
 
-  public RoomController(RoomService roomService) {
+  public RoomsController(RoomService roomService) {
     this.roomService = roomService;
   }
 
