@@ -3,6 +3,7 @@ package com.incubator.dbs.hotelservice.model.dto;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.incubator.dbs.hotelservice.model.constant.RoomStatus;
+import java.math.BigDecimal;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,7 +23,7 @@ public class RoomInfoResponse {
   private String type;
   private Integer typeId;
   private Integer numberAvailable;
-  private Double price;
+  private BigDecimal price;
   private String description;
   private Integer numberPersonPerRoom;
   private RoomStatus status;

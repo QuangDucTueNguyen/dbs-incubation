@@ -1,5 +1,6 @@
 package com.incubator.dbs.hotelservice.model.entity;
 
+import java.math.BigDecimal;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -25,7 +26,7 @@ public class RoomType {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer id;
   private Boolean isVirtual;
-  private Double price;
+  private BigDecimal price;
   private String name;
   private Integer numberPeople;
   @OneToMany(mappedBy = "roomType", cascade = CascadeType.ALL,
