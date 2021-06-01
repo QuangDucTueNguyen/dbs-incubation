@@ -7,8 +7,6 @@ spring:
     schemas: public
     locations: classpath:db/migration
     enabled: true
-  application:
-    name: hotel-service
 springdoc:
   swagger-ui:
     path: /swagger-ui.html
