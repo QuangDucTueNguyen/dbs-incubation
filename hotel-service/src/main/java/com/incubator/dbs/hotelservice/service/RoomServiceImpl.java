@@ -122,7 +122,7 @@ public class RoomServiceImpl implements RoomService {
 
   private List<CreateHotelResponse> toHotelResponse(List<Room> rooms) {
     return rooms.stream()
-        .map(room -> room.getHotel())
+        .map(Room::getHotel)
         .map(this::convertToCreateHotelResponse)
         .distinct()
         .collect(Collectors.toList());
