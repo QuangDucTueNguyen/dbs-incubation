@@ -7,8 +7,6 @@ spring:
     schemas: public
     locations: classpath:db/migration
     enabled: true
-  application:
-    name: authentication-service
   sleuth:
     sampler:
       percentage: 1.0
