@@ -6,19 +6,13 @@ import com.incubator.dbs.authenticateservice.model.dto.SignUpRequestDto;
 import com.incubator.dbs.authenticateservice.model.dto.SignupResponseDto;
 import com.incubator.dbs.authenticateservice.service.AuthenticationService;
 import io.github.resilience4j.bulkhead.annotation.Bulkhead;
-import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
-import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
-import io.github.resilience4j.retry.annotation.Retry;
-import io.github.resilience4j.timelimiter.annotation.TimeLimiter;
+import io.github.resilience4j.bulkhead.annotation.Bulkhead.Type;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@CircuitBreaker(name = "auth")
-@Retry(name = "auth")
-@RateLimiter(name = "auth")
-@Bulkhead(name = "auth")
+@Bulkhead(name = "auth", type = Type.SEMAPHORE)
 public class AuthenticationController implements AuthenticationOperations {
 
   private final AuthenticationService authenticationService;

@@ -1,6 +1,7 @@
 package com.incubator.dbs.hotelservice.service.connector;
 
 import com.incubator.dbs.hotelservice.model.dto.ReservationResponse;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import java.time.Instant;
 import java.util.List;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
  * To communicate with reservation service
  */
 @FeignClient(value = "reservationService", url = "${reservation.host}")
+@CircuitBreaker(name = "reservations")
 public interface ReservationConnector {
 
   /**

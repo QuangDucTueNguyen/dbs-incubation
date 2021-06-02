@@ -4,9 +4,7 @@ import com.incubator.dbs.guestservice.model.dto.CreateGuestRequestDto;
 import com.incubator.dbs.guestservice.model.dto.GuestInfoResponseDto;
 import com.incubator.dbs.guestservice.service.UserService;
 import io.github.resilience4j.bulkhead.annotation.Bulkhead;
-import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
-import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
-import io.github.resilience4j.retry.annotation.Retry;
+import io.github.resilience4j.bulkhead.annotation.Bulkhead.Type;
 import java.util.UUID;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,10 +14,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@CircuitBreaker(name = "guests")
-@Retry(name = "guests")
-@RateLimiter(name = "guests")
-@Bulkhead(name = "guests")
+@Bulkhead(name = "guests", type = Type.SEMAPHORE)
 public class GuestsController implements GuestsOperation {
 
   @Autowired
