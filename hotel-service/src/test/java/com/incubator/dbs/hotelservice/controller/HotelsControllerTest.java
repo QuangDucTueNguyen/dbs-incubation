@@ -12,7 +12,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-class HotelControllerTest {
+class HotelsControllerTest {
 
   private final HotelOperations hotelOperations;
   private final HotelService hotelService;
@@ -23,9 +23,9 @@ class HotelControllerTest {
   private final String HOTEL_ADDRESS = "HOTEL_ADDRESS";
   private final String HOTEL_HOTLINE = "123456789";
 
-  public HotelControllerTest() {
+  public HotelsControllerTest() {
     hotelService = Mockito.mock(HotelService.class);
-    hotelOperations = new HotelController(hotelService);
+    hotelOperations = new HotelsController(hotelService);
   }
 
   @Test

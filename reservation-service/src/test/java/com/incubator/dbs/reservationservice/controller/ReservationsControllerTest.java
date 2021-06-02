@@ -25,10 +25,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-public class ReservationControllerTest {
+public class ReservationsControllerTest {
 
   private ReservationService reservationService;
-  private ReservationController reservationController;
+  private ReservationsController reservationController;
   private static final Instant from = Instant.now();
   private static final Instant to = from.plusMillis(5 * 24 * 60 * 60 * 100);
   private static final UUID USER_ID = UUID.randomUUID();
@@ -50,7 +50,7 @@ public class ReservationControllerTest {
     JavaTimeModule module = new JavaTimeModule();
     mapper.registerModule(module);
     reservationService = Mockito.mock(ReservationService.class);
-    reservationController = new ReservationController(reservationService);
+    reservationController = new ReservationsController(reservationService);
     mockMvc = standaloneSetup(reservationController).build();
   }
 

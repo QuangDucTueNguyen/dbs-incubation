@@ -30,3 +30,75 @@ server:
 springdoc:
   swagger-ui:
     path: /swagger-ui.html
+
+resilience4j:
+  circuitbreaker:
+    configs:
+      default:
+        registerHealthIndicator: true
+        slidingWindowSize: 10
+        minimumNumberOfCalls: 5
+        permittedNumberOfCallsInHalfOpenState: 3
+        automaticTransitionFromOpenToHalfOpenEnabled: true
+        waitDurationInOpenState: 5s
+        failureRateThreshold: 50
+        eventConsumerBufferSize: 10
+        recordExceptions:
+          - org.springframework.web.client.HttpServerErrorException
+          - java.util.concurrent.TimeoutException
+          - java.io.IOException
+        ignoreExceptions:
+          - com.incubator.dbs.guestservice.exception.GuestServiceException
+      shared:
+        slidingWindowSize: 100
+        permittedNumberOfCallsInHalfOpenState: 30
+        waitDurationInOpenState: 1s
+        failureRateThreshold: 50
+        eventConsumerBufferSize: 10
+        ignoreExceptions:
+          - com.incubator.dbs.guestservice.exception.GuestServiceException
+    instances:
+      guests:
+        baseConfig: default
+  retry:
+    configs:
+      default:
+        maxRetryAttempts: 3
+        waitDuration: 100
+        retryExceptions:
+          - org.springframework.web.client.HttpServerErrorException
+          - java.util.concurrent.TimeoutException
+          - java.io.IOException
+        ignoreExceptions:
+          - com.incubator.dbs.guestservice.exception.GuestServiceException
+    instances:
+      guests:
+        baseConfig: default
+  bulkhead:
+    configs:
+      default:
+        maxConcurrentCalls: 100
+        maxWaitDuration: 10ms
+    instances:
+      guests:
+        baseConfig: default
+  thread-pool-bulkhead:
+    configs:
+      default:
+        maxThreadPoolSize: 4
+        coreThreadPoolSize: 2
+        queueCapacity: 2
+    instances:
+      guests:
+        baseConfig: default
+  ratelimiter:
+    configs:
+      default:
+        registerHealthIndicator: false
+        limitForPeriod: 10
+        limitRefreshPeriod: 1s
+        timeoutDuration: 0
+        eventConsumerBufferSize: 100
+    instances:
+      guests:
+        baseConfig: default

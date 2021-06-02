@@ -4,6 +4,11 @@ import com.incubator.dbs.reservationservice.model.dto.CreateReservationRequestDT
 import com.incubator.dbs.reservationservice.model.dto.ReservationInfoResponseDTO;
 import com.incubator.dbs.reservationservice.model.dto.UpdateReservationRequestDTO;
 import com.incubator.dbs.reservationservice.service.ReservationService;
+import io.github.resilience4j.bulkhead.annotation.Bulkhead;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
+import io.github.resilience4j.retry.annotation.Retry;
+import io.github.resilience4j.timelimiter.annotation.TimeLimiter;
 import java.time.Instant;
 import java.util.List;
 import javax.validation.Valid;
@@ -12,11 +17,15 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class ReservationController implements ReservationOperations {
+@CircuitBreaker(name = "reservations")
+@Retry(name = "reservations")
+@RateLimiter(name = "reservations")
+@Bulkhead(name = "reservations")
+public class ReservationsController implements ReservationOperations {
 
   private final ReservationService reservationService;
 
-  public ReservationController(ReservationService reservationService) {
+  public ReservationsController(ReservationService reservationService) {
     this.reservationService = reservationService;
   }
 
