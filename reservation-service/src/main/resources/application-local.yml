@@ -1,17 +1,20 @@
 spring:
   datasource:
-    url: ${HOTEL_DB_URL}
+    url: ${RESERVATION_DB_URL}
     username: ${POSTGRES_USERNAME}
     password: ${POSTGRES_PASSWORD}
   flyway:
     schemas: public
     locations: classpath:db/migration
     enabled: true
-  application:
-    name: hotel-service
-springdoc:
-  swagger-ui:
-    path: /swagger-ui.html
+  sleuth:
+    sampler:
+      percentage: 1.0
+  zipkin:
+    base-url: ${ZIPKIN_URL}
+    sender:
+      type: web
+
 eureka:
   client:
     healthcheck:
@@ -22,20 +25,21 @@ eureka:
       defaultZone: ${EUREKA_SERVER_HOST}
   instance:
     hostName: ${spring.application.name}
-  sleuth:
-    sampler:
-      percentage: 1.0
-  zipkin:
-    base-url: ${ZIPKIN_URL}
-    sender:
-      type: web
-
-reservation:
-  host: ${RESERVATION_SERVICE_HOST}
-  getReservation: /api/reservation
 
 server:
-  port: 8081
+  port: 8080
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+
+hotelService:
+  host: ${HOTEL_SERVICE_HOST}
+  getAllRoomType: /api/rooms/types
+
+guestService:
+  host: ${GUEST_SERVICE_HOST}
+  getUserInfo: /api/guest/{id}
 
 resilience4j:
   circuitbreaker:
@@ -54,7 +58,7 @@ resilience4j:
           - java.util.concurrent.TimeoutException
           - java.io.IOException
         ignoreExceptions:
-          - com.incubator.dbs.hotelservice.exception.HotelServiceException
+          - com.incubator.dbs.reservationservice.exception.ReservationServiceException
       shared:
         slidingWindowSize: 100
         permittedNumberOfCallsInHalfOpenState: 30
@@ -62,11 +66,9 @@ resilience4j:
         failureRateThreshold: 50
         eventConsumerBufferSize: 10
         ignoreExceptions:
-          - com.incubator.dbs.hotelservice.exception.HotelServiceException
+          - com.incubator.dbs.reservationservice.exception.ReservationServiceException
     instances:
-      hotels:
-        baseConfig: default
-      rooms:
+      reservations:
         baseConfig: default
   retry:
     configs:
@@ -78,11 +80,9 @@ resilience4j:
           - java.util.concurrent.TimeoutException
           - java.io.IOException
         ignoreExceptions:
-          - com.incubator.dbs.hotelservice.exception.HotelServiceException
+          - com.incubator.dbs.reservationservice.exception.ReservationServiceException
     instances:
-      hotels:
-        baseConfig: default
-      rooms:
+      reservations:
         baseConfig: default
   bulkhead:
     configs:
@@ -90,9 +90,7 @@ resilience4j:
         maxConcurrentCalls: 100
         maxWaitDuration: 10ms
     instances:
-      hotels:
-        baseConfig: default
-      rooms:
+      reservations:
         baseConfig: default
   thread-pool-bulkhead:
     configs:
@@ -101,9 +99,7 @@ resilience4j:
         coreThreadPoolSize: 2
         queueCapacity: 2
     instances:
-      hotels:
-        baseConfig: default
-      rooms:
+      reservations:
         baseConfig: default
   ratelimiter:
     configs:
@@ -114,7 +110,5 @@ resilience4j:
         timeoutDuration: 0
         eventConsumerBufferSize: 100
     instances:
-      hotels:
-        baseConfig: default
-      rooms:
+      reservations:
         baseConfig: default

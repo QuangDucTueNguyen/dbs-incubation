@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import java.util.UUID;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -45,7 +46,7 @@ public interface GuestsOperation {
               schema = @Schema(implementation = GuestInfoResponseDto.class))}),
       @ApiResponse(responseCode = "404", description = "Not found",
           content = @Content)})
-  GuestInfoResponseDto get(@PathVariable String id);
+  GuestInfoResponseDto get(@PathVariable UUID id);
 
   /**
    * delete guest
@@ -53,5 +54,5 @@ public interface GuestsOperation {
    */
   @DeleteMapping("/{id}")
   @ApiResponse(responseCode = "204", description = "No content", content = @Content)
-  void delete(@PathVariable String id);
+  void delete(@PathVariable UUID id);
 }

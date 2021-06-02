@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS public.room_type
   id serial PRIMARY KEY,
   name varchar,
   is_virtual boolean default false,
-  price money,
+  price decimal,
   number_people integer
 );
 
@@ -28,3 +28,12 @@ CREATE TABLE IF NOT EXISTS public.room
   FOREIGN KEY (room_type_id) REFERENCES public.room_type (id)
                         ON UPDATE CASCADE ON DELETE CASCADE
 );
+
+INSERT INTO public.room_type(name, is_virtual, price, number_people)
+	VALUES ('PRESIDENT', false, 1000, 10);
+INSERT INTO public.room_type(name, is_virtual, price, number_people)
+	VALUES ('SUIT', false, 500, 2);
+INSERT INTO public.room_type(name, is_virtual, price, number_people)
+	VALUES ('NORMAL', false, 400, 4);
+INSERT INTO public.room_type(name, is_virtual, price, number_people)
+	VALUES ('VIRTUAL', true, 200, 2);

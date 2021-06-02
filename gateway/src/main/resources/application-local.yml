@@ -1,0 +1,53 @@
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+      routes:
+      - id: guests-service
+        uri: http://localhost:8082
+        predicates:
+        - Path=/api/guests/**
+        filters:
+        - CustomFilter
+      - id: reservations-service
+        uri: http://localhost:8080
+        predicates:
+        - Path=/api/reservations/**
+        filters:
+        - CustomFilter
+      - id: hotels-service
+        uri: http://localhost:8081
+        predicates:
+        - Path=/api/hotels/**
+        - Path=/api/rooms/**
+        filters:
+        - CustomFilter
+      - id: authentication-service
+        uri: http://localhost:8084
+        predicates:
+        - Path=/api/auth/**
+
+eureka:
+  client:
+    healthcheck:
+      enabled: true
+    registerWithEureka: true
+    fetchRegistry: true
+    serviceUrl:
+      defaultZone: ${EUREKA_SERVER_HOST}
+  instance:
+    hostName: localhost
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+server:
+  port: 7999
+
+
+jwt:
+  secret: ${JWT_SECRET_KEY}

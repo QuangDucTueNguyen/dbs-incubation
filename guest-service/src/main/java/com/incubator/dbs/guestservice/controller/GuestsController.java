@@ -7,7 +7,7 @@ import io.github.resilience4j.bulkhead.annotation.Bulkhead;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import io.github.resilience4j.retry.annotation.Retry;
-import io.github.resilience4j.timelimiter.annotation.TimeLimiter;
+import java.util.UUID;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -36,13 +36,13 @@ public class GuestsController implements GuestsOperation {
   }
 
   @Override
-  public GuestInfoResponseDto get(String id) {
+  public GuestInfoResponseDto get(UUID id) {
     return userService.get(id);
   }
 
   @Override
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  public void delete(String id) {
+  public void delete(UUID id) {
     userService.delete(id);
   }
 }

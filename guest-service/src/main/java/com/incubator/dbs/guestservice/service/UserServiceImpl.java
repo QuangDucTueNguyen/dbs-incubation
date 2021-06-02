@@ -6,6 +6,7 @@ import com.incubator.dbs.guestservice.model.dto.CreateGuestRequestDto;
 import com.incubator.dbs.guestservice.model.dto.GuestInfoResponseDto;
 import com.incubator.dbs.guestservice.model.entity.UserProfile;
 import com.incubator.dbs.guestservice.repository.UserProfileRepository;
+import java.util.UUID;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -34,7 +35,7 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public GuestInfoResponseDto get(String id) {
+  public GuestInfoResponseDto get(UUID id) {
     log.info("get user [{}]", id);
     return userProfileRepository.findById(id)
         .map(this::convertToGuestInfo)
@@ -45,7 +46,7 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public void delete(String id) {
+  public void delete(UUID id) {
     log.info("delete user [{}]", id);
     userProfileRepository.deleteById(id);
   }

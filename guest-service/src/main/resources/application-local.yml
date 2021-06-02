@@ -7,8 +7,6 @@ spring:
     schemas: public
     locations: classpath:db/migration
     enabled: true
-  application:
-    name: guest-service
   sleuth:
     sampler:
       percentage: 1.0

@@ -22,14 +22,11 @@ class RoomsControllerTest {
   private final RoomsController roomController;
   private final Integer ROOM_ID_1 = new Random().nextInt();
   private final String ROOM_NAME_1 = "ROOM_NAME_1";
-  private final Integer HOTEL_ID = Integer.MAX_VALUE;
-  private final String HOTEL_NAME = "HOTEL_NAME";
   private final String DESCRIPTION = RandomStringUtils.randomAlphabetic(1000);
   private final Integer ROOM_TYPE_ID_1 = new Random().nextInt();
   private final Integer ROOM_TYPE_ID_2 = new Random().nextInt();
   private final String ROOM_TYPE_NAME_1 = "ROOM_TYPE_NAME_1";
   private final String ROOM_TYPE_NAME_2 = "ROOM_TYPE_NAME_2";
-  private final Integer NUMBER_AVAILABLE = 5;
   private final Integer NUMBER_PERSON_PER_ROOM = new Random().nextInt(10);
   private final Instant from = Instant.now();
   private final Instant to = Instant.now().plusMillis(5 * 24 * 60 * 60 * 100);
