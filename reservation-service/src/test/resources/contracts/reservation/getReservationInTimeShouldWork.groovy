@@ -12,7 +12,7 @@ Contract.make {
         ]
     request {
         method GET()
-        url '/api/reservations?from=2021-06-04T12:00:00.588759200Z&to=2021-06-10T12:00:00.588759200Z'
+        url '/api/reservations?from=2021-06-04T12%3A00%3A00.588759200Z&to=2021-06-10T12%3A00%3A00.588759200Z'
     }
     response {
         status OK()
