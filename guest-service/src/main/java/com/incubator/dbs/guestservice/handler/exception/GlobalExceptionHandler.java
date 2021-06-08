@@ -1,6 +1,9 @@
-package com.incubator.dbs.guestservice.exception;
+package com.incubator.dbs.guestservice.handler.exception;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.incubator.dbs.guestservice.exception.ExceptionMarshaller;
+import com.incubator.dbs.guestservice.exception.GuestErrorResponse;
+import com.incubator.dbs.guestservice.exception.GuestServiceException;
 import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;

@@ -22,7 +22,6 @@ import lombok.NoArgsConstructor;
 public class UserProfile {
 
   @Id
-  @GeneratedValue
   private UUID id;
   private String name;
   private String address;

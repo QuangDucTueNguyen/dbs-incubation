@@ -4,7 +4,7 @@ import brave.Span;
 import brave.Tracer;
 import brave.propagation.TraceContext;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.util.Optional;
+import com.incubator.dbs.guestservice.handler.exception.GlobalExceptionHandler;
 import java.util.Random;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
