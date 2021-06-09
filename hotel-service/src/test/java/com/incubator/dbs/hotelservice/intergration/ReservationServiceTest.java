@@ -18,7 +18,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @AutoConfigureStubRunner(stubsMode = StubRunnerProperties.StubsMode.LOCAL,
-    ids = "com.incubator.dbs.reservationservice:reservation-service:+:stubs:8096")
+    ids = "com.incubator.dbs:reservation-service:+:stubs:8096")
 @EnableFeignClients(clients = ReservationConnector.class)
 @Import({FeignAutoConfiguration.class, HttpMessageConvertersAutoConfiguration.class})
 @TestPropertySource(properties = {
