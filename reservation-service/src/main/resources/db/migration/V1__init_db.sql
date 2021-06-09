@@ -9,6 +9,6 @@ CREATE TABLE IF NOT EXISTS public.reservation
     from_date date NOT NULL,
     to_date date NOT NULL,
     status varchar NOT NULL,
-    total money NOT NULL,
+    total numeric NOT NULL,
     number_rooms integer NOT NULL
 );
