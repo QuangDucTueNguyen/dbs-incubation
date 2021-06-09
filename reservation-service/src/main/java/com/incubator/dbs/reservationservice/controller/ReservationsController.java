@@ -8,6 +8,7 @@ import io.github.resilience4j.bulkhead.annotation.Bulkhead;
 import io.github.resilience4j.bulkhead.annotation.Bulkhead.Type;
 import java.time.Instant;
 import java.util.List;
+import java.util.UUID;
 import javax.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -30,13 +31,13 @@ public class ReservationsController implements ReservationOperations {
   }
 
   @Override
-  public ReservationInfoResponseDTO update(String id, @Valid UpdateReservationRequestDTO request) {
+  public ReservationInfoResponseDTO update(UUID id, @Valid UpdateReservationRequestDTO request) {
     return reservationService.update(id, request);
   }
 
   @Override
   @ResponseStatus(value = HttpStatus.NO_CONTENT)
-  public void delete(String id) {
+  public void delete(UUID id) {
     reservationService.delete(id);
   }
 

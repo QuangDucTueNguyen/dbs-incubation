@@ -93,7 +93,7 @@ public class ReservationsControllerTest {
         .id(id)
         .status(ReservationStatus.PAID)
         .build();
-    Mockito.when(reservationService.update(id.toString(), request)).thenReturn(expected);
+    Mockito.when(reservationService.update(id, request)).thenReturn(expected);
     mockMvc.perform(
         MockMvcRequestBuilders.patch(String.format("/api/reservations/%s", id.toString()))
             .content(this.mapper.writeValueAsString(request))
@@ -104,10 +104,10 @@ public class ReservationsControllerTest {
 
   @Test
   public void delete_shouldWork() throws Exception {
-    var id = RESERVATION_ID_1.toString();
+    var id = RESERVATION_ID_1;
     reservationController.delete(id);
     mockMvc.perform(
-        MockMvcRequestBuilders.delete(String.format("/api/reservations/%s", id))
+        MockMvcRequestBuilders.delete(String.format("/api/reservations/%s", id.toString()))
             .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isNoContent());
   }

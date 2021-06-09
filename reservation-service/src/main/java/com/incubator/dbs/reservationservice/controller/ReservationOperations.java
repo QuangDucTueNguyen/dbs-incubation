@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import java.time.Instant;
 import java.util.List;
+import java.util.UUID;
 import javax.validation.Valid;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -40,11 +41,11 @@ public interface ReservationOperations {
           content = @Content),
       @ApiResponse(responseCode = "404", description = "Not Found",
           content = @Content)})
-  ReservationInfoResponseDTO update(@PathVariable String id, @Valid @RequestBody UpdateReservationRequestDTO request);
+  ReservationInfoResponseDTO update(@PathVariable UUID id, @Valid @RequestBody UpdateReservationRequestDTO request);
 
   @DeleteMapping("/{id}")
   @ApiResponse(responseCode = "204", description = "No content", content = @Content)
-  void delete(@PathVariable String id);
+  void delete(@PathVariable UUID id);
 
   @GetMapping("/users/{id}/history")
   @ApiResponses(value = {

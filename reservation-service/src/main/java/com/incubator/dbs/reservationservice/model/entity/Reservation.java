@@ -24,7 +24,7 @@ import lombok.NoArgsConstructor;
 public class Reservation {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @GeneratedValue(strategy = GenerationType.AUTO)
   private UUID id;
   private UUID userId;
   private Integer hotelId;

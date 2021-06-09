@@ -169,14 +169,14 @@ class ReservationServiceTest {
     var entity = Reservation.builder()
         .status(ReservationStatus.PENDING)
         .build();
-    Mockito.when(reservationRepository.findById(RESERVATION_ID_1.toString())).thenReturn(Optional.of(entity));
+    Mockito.when(reservationRepository.findById(RESERVATION_ID_1)).thenReturn(Optional.of(entity));
     entity.setStatus(ReservationStatus.valueOf(request.getStatus()));
     entity.setUpdateTime(Instant.now());
     Mockito.when(reservationRepository.save(entity)).thenReturn(entity);
     var expected = ReservationInfoResponseDTO.builder()
         .status(entity.getStatus())
         .build();
-    var result = reservationService.update(RESERVATION_ID_1.toString(), request);
+    var result = reservationService.update(RESERVATION_ID_1, request);
     Assertions.assertEquals(expected.getStatus(), result.getStatus());
     Assertions.assertEquals(expected.getStatus(), ReservationStatus.PAID);
   }
@@ -186,15 +186,15 @@ class ReservationServiceTest {
     var request = UpdateReservationRequestDTO.builder()
         .status(ReservationStatus.PAID.getValue())
         .build();
-    Mockito.when(reservationRepository.findById(RESERVATION_ID_1.toString())).thenReturn(Optional.empty());
+    Mockito.when(reservationRepository.findById(RESERVATION_ID_1)).thenReturn(Optional.empty());
     Assertions.assertThrows(ReservationServiceException.class,
-        () -> reservationService.update(RESERVATION_ID_1.toString(), request));
+        () -> reservationService.update(RESERVATION_ID_1, request));
   }
 
   @Test
   void delete_shouldWord() {
-    reservationService.delete(RESERVATION_ID_1.toString());
-    Mockito.verify(reservationRepository, Mockito.times(1)).deleteById(RESERVATION_ID_1.toString());
+    reservationService.delete(RESERVATION_ID_1);
+    Mockito.verify(reservationRepository, Mockito.times(1)).deleteById(RESERVATION_ID_1);
   }
 
   @Test
@@ -280,7 +280,7 @@ class ReservationServiceTest {
         .build();
     var userReservationEntities = List.of(entity1, entity2);
     var expected = List.of(reservation1, reservation2);
-    Mockito.when(reservationRepository.findAllByFromDateAfterAndToDateBefore(from, to))
+    Mockito.when(reservationRepository.findAllByFromDateBeforeAndToDateAfter(from, to))
         .thenReturn(userReservationEntities);
     var result = reservationService.get(from, to);
 
