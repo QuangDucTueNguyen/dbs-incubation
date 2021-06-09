@@ -5,14 +5,15 @@ import com.incubator.dbs.reservationservice.model.dto.ReservationInfoResponseDTO
 import com.incubator.dbs.reservationservice.model.dto.UpdateReservationRequestDTO;
 import java.time.Instant;
 import java.util.List;
+import java.util.UUID;
 
 public interface ReservationService {
 
   ReservationInfoResponseDTO create(CreateReservationRequestDTO request);
 
-  ReservationInfoResponseDTO update(String id, UpdateReservationRequestDTO request);
+  ReservationInfoResponseDTO update(UUID id, UpdateReservationRequestDTO request);
 
-  void delete(String id);
+  void delete(UUID id);
 
   List<ReservationInfoResponseDTO> getByUser(String id);
 

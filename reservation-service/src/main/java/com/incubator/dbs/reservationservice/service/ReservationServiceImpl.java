@@ -76,7 +76,7 @@ public class ReservationServiceImpl implements ReservationService {
   }
 
   @Override
-  public ReservationInfoResponseDTO update(String id, UpdateReservationRequestDTO request) {
+  public ReservationInfoResponseDTO update(UUID id, UpdateReservationRequestDTO request) {
     log.info("Update reservation {} with body {}", id, request);
     return reservationRepository.findById(id)
         .map(rt -> {
@@ -90,7 +90,7 @@ public class ReservationServiceImpl implements ReservationService {
   }
 
   @Override
-  public void delete(String id) {
+  public void delete(UUID id) {
     log.info("Delete reservation {}", id);
     reservationRepository.deleteById(id);
   }
@@ -107,7 +107,7 @@ public class ReservationServiceImpl implements ReservationService {
   @Override
   public List<ReservationInfoResponseDTO> get(Instant from, Instant to) {
     log.info("Get reservation from {} - to {}", from, to);
-    return reservationRepository.findAllByFromDateAfterAndToDateBefore(from, to)
+    return reservationRepository.findAllByFromDateBeforeAndToDateAfter(from, to)
         .stream()
         .map(this::toReservationInfo)
         .collect(Collectors.toList());
