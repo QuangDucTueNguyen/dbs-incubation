@@ -20,6 +20,7 @@
 		<springdoc.version>1.4.8</springdoc.version>
 		<postgressql.version>42.2.16</postgressql.version>
 		<resilience4j.version>1.7.0</resilience4j.version>
+		<spring-cloud-contract.version>3.0.4-SNAPSHOT</spring-cloud-contract.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -118,6 +119,16 @@
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-config</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-contract-wiremock</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-contract-stub-runner</artifactId>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 
 	<dependencyManagement>
@@ -137,6 +148,15 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-contract-maven-plugin</artifactId>
+				<version>${spring-cloud-contract.version}</version>
+				<extensions>true</extensions>
+				<configuration>
+					<testFramework>JUNIT</testFramework>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>
