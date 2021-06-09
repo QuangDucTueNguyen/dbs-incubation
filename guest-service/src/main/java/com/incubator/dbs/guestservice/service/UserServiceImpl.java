@@ -24,13 +24,10 @@ public class UserServiceImpl implements UserService {
 
 
   private final CommandGateway commandGateway;
-  private final UserProfileRepository userProfileRepository;
   private final QueryGateway queryGateway;
 
-  public UserServiceImpl(CommandGateway commandGateway,
-      UserProfileRepository userProfileRepository, QueryGateway queryGateway) {
+  public UserServiceImpl(CommandGateway commandGateway, QueryGateway queryGateway) {
     this.commandGateway = commandGateway;
-    this.userProfileRepository = userProfileRepository;
     this.queryGateway = queryGateway;
   }
 

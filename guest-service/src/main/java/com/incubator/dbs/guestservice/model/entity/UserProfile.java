@@ -3,7 +3,6 @@ package com.incubator.dbs.guestservice.model.entity;
 import java.math.BigInteger;
 import java.util.UUID;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import lombok.AllArgsConstructor;

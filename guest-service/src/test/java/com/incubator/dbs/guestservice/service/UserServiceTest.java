@@ -29,16 +29,14 @@ class UserServiceTest {
   private final String NAME = "NAME";
   private final UUID USER_ID = UUID.randomUUID();
   private final UserService userService;
-  private UserProfileRepository userProfileRepository;
   private CommandGateway commandGateway;
   private QueryGateway queryGateway;
 
   public UserServiceTest() {
-    userProfileRepository = Mockito.mock(UserProfileRepository.class);
 
     commandGateway = Mockito.mock(CommandGateway.class);
     queryGateway = Mockito.mock(QueryGateway.class);
-    userService = new UserServiceImpl(commandGateway, userProfileRepository, queryGateway);
+    userService = new UserServiceImpl(commandGateway, queryGateway);
   }
 
   @Test
