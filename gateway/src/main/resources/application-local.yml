@@ -35,7 +35,7 @@ eureka:
     registerWithEureka: true
     fetchRegistry: true
     serviceUrl:
-      defaultZone: ${EUREKA_SERVER_HOST}
+      defaultZone: ${EUREKA_SERVER_HOST:http://localhost:8761/eureka/}
   instance:
     hostName: localhost
 
@@ -50,4 +50,4 @@ server:
 
 
 jwt:
-  secret: ${JWT_SECRET_KEY}
+  secret: ${JWT_SECRET_KEY:abc@123}

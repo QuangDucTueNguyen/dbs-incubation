@@ -1,8 +1,8 @@
 spring:
   datasource:
-    url: ${GUEST_PROFILE_DB_URL}
-    username: ${POSTGRES_USERNAME}
-    password: ${POSTGRES_PASSWORD}
+    url: ${GUEST_PROFILE_DB_URL:jdbc:postgresql://localhost:9000/profile}
+    username: ${POSTGRES_USERNAME:postgres}
+    password: ${POSTGRES_PASSWORD:admin}
   flyway:
     schemas: public
     locations: classpath:db/migration
@@ -11,12 +11,21 @@ spring:
     sampler:
       percentage: 1.0
   zipkin:
-    base-url: ${ZIPKIN_URL}
+    base-url: ${ZIPKIN_URL:http://localhost:9411}
     sender:
       type: web
   jpa:
     hibernate:
       ddl-auto: update
+  kafka:
+    consumer:
+      topic: ${KAFKA_TOPIC:create_guest_queue}
+      bootstrap-servers: ${KAFKA_SERVER:http://localhost:9092}
+      auto-offset-reset: earliest
+      group-id: reservation_system
+      key-deserializer: com.incubator.dbs.guestservice.model.template.deserializer.CreateGuestDeserializer
+      value-deserializer: com.incubator.dbs.guestservice.model.template.deserializer.CreateGuestDeserializer
+
 eureka:
   client:
     healthcheck:
@@ -24,7 +33,7 @@ eureka:
     registerWithEureka: true
     fetchRegistry: true
     serviceUrl:
-      defaultZone: ${EUREKA_SERVER_HOST}
+      defaultZone: ${EUREKA_SERVER_HOST:http://localhost:8761/eureka/}
   instance:
     hostName: ${spring.application.name}
 server:
