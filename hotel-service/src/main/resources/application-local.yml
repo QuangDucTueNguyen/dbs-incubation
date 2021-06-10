@@ -1,8 +1,8 @@
 spring:
   datasource:
-    url: ${HOTEL_DB_URL}
-    username: ${POSTGRES_USERNAME}
-    password: ${POSTGRES_PASSWORD}
+    url: ${HOTEL_DB_URL:jdbc:postgresql://localhost:9000/hotel}
+    username: ${POSTGRES_USERNAME:postgres}
+    password: ${POSTGRES_PASSWORD:admin}
   flyway:
     schemas: public
     locations: classpath:db/migration
@@ -11,7 +11,7 @@ spring:
     sampler:
       percentage: 1.0
   zipkin:
-    base-url: ${ZIPKIN_URL}
+    base-url: ${ZIPKIN_URL:http://localhost:9411}
     sender:
       type: web
 
@@ -25,16 +25,16 @@ eureka:
     registerWithEureka: true
     fetchRegistry: true
     serviceUrl:
-      defaultZone: ${EUREKA_SERVER_HOST}
+      defaultZone: ${EUREKA_SERVER_HOST:http://localhost:8761/eureka/}
   instance:
     hostName: ${spring.application.name}
 
 reservation:
-  host: ${RESERVATION_SERVICE_HOST}
-  getReservation: /api/reservation
+  host: ${RESERVATION_SERVICE_HOST:http://localhost:9080}
+  getReservation: /api/reservations
 
 server:
-  port: 8081
+  port: 9081
 
 resilience4j:
   circuitbreaker:
